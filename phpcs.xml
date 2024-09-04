@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="MyCodingStandard">
+    <description>My custom coding standard</description>
+
+    <file>tests</file>
+    <file>app</file>
+
+    <!-- Our base rule: set to PSR12 -->
+    <rule ref="PSR12">
+    </rule>
+
+    <!-- Disabling the Generic.Files.LineLength Rule -->
+    <rule ref="Generic.Files.LineLength">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName">
+        <severity>0</severity>
+    </rule>
+</ruleset>

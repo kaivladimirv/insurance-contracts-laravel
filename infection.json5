@@ -1,0 +1,13 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "app"
+        ]
+    },
+    "timeout": 10,
+    "mutators": {
+        "@default": true
+    },
+    "testFrameworkOptions": "--exclude-testsuite=Database"
+}

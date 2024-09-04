@@ -1,0 +1,3997 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Contracts Api",
+        "description": "This API allows the user to work with insurance contracts.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1"
+        }
+    ],
+    "paths": {
+        "/api": {
+            "parameters": [
+                {
+                    "name": "X-Requested-With",
+                    "in": "header",
+                    "schema": {
+                        "type": "string",
+                        "default": "XMLHttpRequest"
+                    }
+                }
+            ]
+        },
+        "/company": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company data",
+                "operationId": "0e1eaf61828947c5b8646dbcee8f5260",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompanyResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Registers a company",
+                "operationId": "34e0084810e2e477b886fd4a33eac281",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Company successfully registered"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/NameValidationErrorResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/EmailValidationErrorResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/PasswordValidationErrorResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/company/confirm/{emailConfirmToken}": {
+            "patch": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Company confirmation",
+                "operationId": "20b13ad560ad7b1c92a57f81a34846de",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/emailConfirmToken"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Company is confirmed"
+                    },
+                    "404": {
+                        "description": "Token not found"
+                    }
+                }
+            }
+        },
+        "/company/token": {
+            "patch": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get access token",
+                "operationId": "6ed99d4a8d517f23332dfc5fab94924e",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompanyTokenResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid username or password"
+                    }
+                },
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/company/update": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Update company data",
+                "operationId": "7a55e72c1bd97c7cbcb6e4dbe22ed89a",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompanyUpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Company changed successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NameValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/company/password": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Change password",
+                "operationId": "f777d7083c3e7ba8fadc166d8b5c299f",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Password changed successfully"
+                    },
+                    "401": {
+                        "description": "Invalid username or password"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PasswordValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/company/email": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Change email",
+                "operationId": "d9e7fbcdfab267aa46814062ca9967cd",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangeEmailCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Email changed successfully"
+                    },
+                    "401": {
+                        "description": "Invalid username or password"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmailValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/company/email/confirm/{newEmailConfirmToken}": {
+            "patch": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Confirm new email",
+                "operationId": "207d97a638d90428a608cb50ad49beff",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/newEmailConfirmToken"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "New email confirmed"
+                    },
+                    "401": {
+                        "description": "Invalid username or password"
+                    },
+                    "404": {
+                        "description": "New email confirm token not found"
+                    }
+                },
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Get contract list",
+                "operationId": "ee3d11bd377d704f11055900ae0bca16",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/contractNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/periodFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/periodTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/maxAmountFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/maxAmountTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ContractResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Add contract",
+                "operationId": "16cfc7a89e05bcca267234e620042864",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractAddCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The contract has been successfully created. Returns contract id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Contract id",
+                                            "type": "integer",
+                                            "example": 256
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Get contract data",
+                "operationId": "894057641fa105ffc74e69aa2e203fe4",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Delete contract",
+                "operationId": "f6b634a5bfcfdfa8e6176626e7c87007",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The contract has been successfully deleted"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    },
+                    "409": {
+                        "description": "Services were provided under the contract"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/update": {
+            "post": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Update contract data",
+                "operationId": "2c879753d3b15edf89dec14ccf8d7bf5",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractUpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The contract has been successfully updated"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/provided_services": {
+            "get": {
+                "tags": [
+                    "Contracts"
+                ],
+                "summary": "Get a list of services that were provided under the contract",
+                "operationId": "76336acfc865fb8599149e36bbfaa758",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceIdInQuery"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceName"
+                    },
+                    {
+                        "$ref": "#components/parameters/dateOfServiceFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/dateOfServiceTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/limitType"
+                    },
+                    {
+                        "$ref": "#components/parameters/quantityFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/quantityTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/priceFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/priceTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/maxAmountFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/maxAmountTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ProvidedServiceResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/services": {
+            "get": {
+                "tags": [
+                    "Contracts/Services"
+                ],
+                "summary": "Get contract services",
+                "operationId": "59f6aa315edde0662ace1a39d4d3459d",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/contractServiceLimitType"
+                    },
+                    {
+                        "$ref": "#components/parameters/limitValueFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/limitValueTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ContractServiceResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contracts/Services"
+                ],
+                "summary": "Add service to contract",
+                "operationId": "bd09f46c2e6f04a34ee68528a3d6dc71",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractServiceAddCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The service has been successfully added to the contract"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ServiceIdValidationError"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/LimitValidationError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/services/{serviceId}": {
+            "get": {
+                "tags": [
+                    "Contracts/Services"
+                ],
+                "summary": "Get service data",
+                "operationId": "fc98ba9f64f9740fd6ce691f7ee4022a",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractServiceResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or service not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Contracts/Services"
+                ],
+                "summary": "Remove a service from a contract",
+                "operationId": "318b0fe48f68cf6b63e3d129eb8f2614",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The service was successfully removed from the contract"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or service not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/services/{serviceId}/update": {
+            "post": {
+                "tags": [
+                    "Contracts/Services"
+                ],
+                "summary": "Update service data",
+                "operationId": "d88baedb5e097af8b38c89ee753ed768",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractServiceUpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The service has been successfully updated in the contract"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or service not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LimitValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/debtors": {
+            "get": {
+                "tags": [
+                    "Debtors"
+                ],
+                "summary": "Get debtors by company",
+                "operationId": "f20e91a924653fe18db61a79cb852817",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceIdInQuery"
+                    },
+                    {
+                        "$ref": "#components/parameters/debtFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/debtTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/DebtorResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DebtorsValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/debtors/{contractId}": {
+            "get": {
+                "tags": [
+                    "Debtors"
+                ],
+                "summary": "Get debtors by contract",
+                "operationId": "ade879eeaf3eddc573b07b46742c201c",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceIdInQuery"
+                    },
+                    {
+                        "$ref": "#components/parameters/debtFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/debtTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/DebtorResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DebtorsValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/insured_persons": {
+            "get": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Get insured persons",
+                "operationId": "7f8f242066a1e20f7b58e8a214fb2532",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/policyNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/isAllowedToExceedLimit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/InsuredPersonResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Add insured person to contract",
+                "operationId": "083feea727c678cbdbecddc87d0e6376",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InsuredPersonAddCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The insured person has been successfully added to the contract. Returns insured person id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Insured person id",
+                                            "type": "integer",
+                                            "example": 102
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/PersonIdValidationError"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/InsuredPersonValidationError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/insured_persons/{insuredPersonId}": {
+            "get": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Get insured person data",
+                "operationId": "1519753a4fd5aca048579368dc5ea931",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InsuredPersonResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or insured person not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Remove a insured person from a contract",
+                "operationId": "6c5f065add08752848b93608e4411634",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The insured person was successfully removed from the contract"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or insured person not found"
+                    },
+                    "409": {
+                        "description": "Services have already been provided to the insured person"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/insured_persons/{insuredPersonId}/update": {
+            "post": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Update insured person data",
+                "operationId": "2ce78f509b63d24651c3d81476781dfd",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InsuredPersonUpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The insured person has been successfully updated in the contract"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or insured person not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InsuredPersonValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contracts/{contractId}/insured_persons/{insuredPersonId}/balance": {
+            "get": {
+                "tags": [
+                    "Contracts/Insured persons"
+                ],
+                "summary": "Get balance for the insured person",
+                "operationId": "4a6170bef062cf1e6c2721ada7a7ca0d",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/contractId"
+                    },
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BalanceResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Contract or insured person not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/persons": {
+            "get": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Get person list",
+                "operationId": "7dba64cb4efbc26ada20473453031281",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/lastName"
+                    },
+                    {
+                        "$ref": "#components/parameters/firstName"
+                    },
+                    {
+                        "$ref": "#components/parameters/middleName"
+                    },
+                    {
+                        "$ref": "#components/parameters/email"
+                    },
+                    {
+                        "$ref": "#components/parameters/phoneNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/notifierType"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/PersonResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Add person",
+                "operationId": "5fe16adf62ca95650c3c154c8eab7760",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PersonAddCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The person has been successfully added. Returns person id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Person id",
+                                            "type": "integer",
+                                            "example": 345
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/persons/{personId}": {
+            "get": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Get service data",
+                "operationId": "b07967a654b9c0764a1f88d2922931a4",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/personId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Person not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Delete person",
+                "operationId": "f42e130a339a5251e3f63adf4145e309",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/personId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The person has been successfully deleted"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Person not found"
+                    },
+                    "409": {
+                        "description": "The person is the insured person"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/persons/{personId}/update": {
+            "post": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Update person data",
+                "operationId": "154129fef5c02ef8809b20f696d0a569",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/personId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The person has been successfully updated"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Person not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/insured_persons/{insuredPersonId}/provided_services": {
+            "get": {
+                "tags": [
+                    "Provided services"
+                ],
+                "summary": "Get provided services to insured person",
+                "operationId": "1ed6c655b364706ac50caf074b36f519",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    },
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceIdInQuery"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceName"
+                    },
+                    {
+                        "$ref": "#components/parameters/dateOfServiceFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/dateOfServiceTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/limitType"
+                    },
+                    {
+                        "$ref": "#components/parameters/quantityFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/quantityTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/priceFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/priceTo"
+                    },
+                    {
+                        "$ref": "#components/parameters/amountFrom"
+                    },
+                    {
+                        "$ref": "#components/parameters/amountTo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ProvidedServiceResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Insured person not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Provided services"
+                ],
+                "summary": "Registration of the provided service under contract",
+                "operationId": "221cc38f3a2d089a36475ebb91a13097",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProvidedServiceRegistrationCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The provided service has been successfully registered",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Provided service id",
+                                            "type": "integer",
+                                            "example": 2102
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "anyOf": [
+                                                        {
+                                                            "example": "The contract has expired"
+                                                        },
+                                                        {
+                                                            "example": "The date of service provision is not included in the contract period"
+                                                        },
+                                                        {
+                                                            "example": "The number of services provided exceeds the limit under the contract. Contract limit 200. Balance 186."
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Insured person or service not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProvidedServiceValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/insured_persons/{insuredPersonId}/provided_services/{providedServiceId}": {
+            "get": {
+                "tags": [
+                    "Provided services"
+                ],
+                "summary": "Get data about provided service",
+                "operationId": "5a96c9e23c75ca99b6f4733caa452077",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    },
+                    {
+                        "$ref": "#components/parameters/providedServiceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProvidedServiceResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Insured person or provided service not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Provided services"
+                ],
+                "summary": "Cancel the registration of the provided service",
+                "operationId": "39c3cb4f4e4d21908cd72a0522bfe201",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/insuredPersonId"
+                    },
+                    {
+                        "$ref": "#components/parameters/providedServiceId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Cancellation of the registration of the provided service is successfully completed"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Insured person or provided service not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/services": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get service list",
+                "operationId": "96950feb4aaa0ea9dd7db3b3838bd669",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/pageNumber"
+                    },
+                    {
+                        "$ref": "#components/parameters/serviceName"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CollectionResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ServiceResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Add service",
+                "operationId": "712dc5ef305b550f23a52b0c47606882",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The service has been successfully added. Returns service id"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceNameValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/services/{serviceId}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get service data",
+                "operationId": "1e1fe531822b27c462bff222e1789042",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Delete service",
+                "operationId": "a5d84fbb4e3df8f14966189a01140614",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "The service has been successfully deleted"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "409": {
+                        "description": "The service is used in contracts"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/services/{serviceId}/update": {
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Update service data",
+                "operationId": "0225f004c5fcad06dc608339430846de",
+                "parameters": [
+                    {
+                        "$ref": "#components/parameters/serviceId"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ServiceUpdateCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The service has been successfully updated"
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/InvalidTokenResponse"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceNameValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BalanceResource": {
+                "title": "BalanceResource",
+                "required": [
+                    "service_id",
+                    "limit_type",
+                    "balance"
+                ],
+                "properties": {
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": 105
+                    },
+                    "limit_type": {
+                        "description": "Limit type",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 0
+                    },
+                    "balance": {
+                        "description": "Balance",
+                        "type": "number",
+                        "format": "double",
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyResource": {
+                "title": "CompanyTokenResource",
+                "required": [
+                    "name",
+                    "email",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Company name",
+                        "type": "string",
+                        "example": "Company name #1"
+                    },
+                    "email": {
+                        "description": "Company email address",
+                        "type": "string",
+                        "format": "email",
+                        "example": "tester@test.app"
+                    },
+                    "created_at": {
+                        "description": "Company creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Company change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "020-01-02 08:23:11"
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyTokenResource": {
+                "title": "CompanyTokenResource",
+                "required": [
+                    "token_type",
+                    "access_token"
+                ],
+                "properties": {
+                    "token_type": {
+                        "description": "Token type",
+                        "type": "string",
+                        "enum": [
+                            "Bearer"
+                        ],
+                        "example": "Bearer"
+                    },
+                    "access_token": {
+                        "description": "Access token",
+                        "type": "string",
+                        "example": "11|C6AapOjoIutFG4Ydm08CosNws7vfQLoNalDlu2"
+                    }
+                },
+                "type": "object"
+            },
+            "ContractResource": {
+                "title": "ContractResource",
+                "required": [
+                    "id",
+                    "created_at",
+                    "updated_at",
+                    "number",
+                    "start_date",
+                    "end_date",
+                    "max_amount"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Contract id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "description": "Contract creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Contract change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-02 08:23:11"
+                    },
+                    "number": {
+                        "description": "Contract number",
+                        "type": "string",
+                        "example": "DK-12-6"
+                    },
+                    "start_date": {
+                        "description": "Contract start date",
+                        "type": "string",
+                        "example": "2023-01-12"
+                    },
+                    "end_date": {
+                        "description": "Contract end date",
+                        "type": "string",
+                        "example": "2024-01-12"
+                    },
+                    "max_amount": {
+                        "description": "Max amount",
+                        "type": "number",
+                        "example": 13213234
+                    }
+                },
+                "type": "object"
+            },
+            "ContractServiceResource": {
+                "title": "ContractResource",
+                "required": [
+                    "id",
+                    "created_at",
+                    "updated_at",
+                    "service_id",
+                    "limit_type",
+                    "limit_value"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Record id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "description": "Creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-02 08:23:11"
+                    },
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "number",
+                        "example": 456
+                    },
+                    "limit_type": {
+                        "description": "Contract start date",
+                        "type": "number",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 0
+                    },
+                    "limit_value": {
+                        "description": "Limit value",
+                        "type": "number",
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "DebtorResource": {
+                "title": "DebtorResource",
+                "required": [
+                    "contract_id",
+                    "insured_person_id",
+                    "service_id",
+                    "limit_type",
+                    "debt"
+                ],
+                "properties": {
+                    "contract_id": {
+                        "description": "Contract id",
+                        "type": "integer",
+                        "example": 56
+                    },
+                    "insured_person_id": {
+                        "description": "Insured person id",
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": 248
+                    },
+                    "limit_type": {
+                        "description": "Limit type",
+                        "type": "number",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 0
+                    },
+                    "debt": {
+                        "description": "Debt",
+                        "type": "number",
+                        "example": 5000
+                    }
+                },
+                "type": "object"
+            },
+            "InsuredPersonResource": {
+                "title": "ContractResource",
+                "required": [
+                    "id",
+                    "created_at",
+                    "updated_at",
+                    "service_id",
+                    "limit_type",
+                    "limit_value"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Record id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "description": "Creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-02 08:23:11"
+                    },
+                    "policy_number": {
+                        "description": "Policy number",
+                        "type": "string",
+                        "example": "SDD-02"
+                    },
+                    "is_allowed_to_exceed_limit": {
+                        "description": "Is allowed to exceed limit",
+                        "type": "boolean",
+                        "enum": [
+                            false,
+                            true
+                        ],
+                        "example": false
+                    },
+                    "person_id": {
+                        "description": "Person id",
+                        "type": "number",
+                        "example": 4
+                    }
+                },
+                "type": "object"
+            },
+            "PersonResource": {
+                "title": "PersonResource",
+                "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Person id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "description": "Person creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Person change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-02 08:23:11"
+                    },
+                    "last_name": {
+                        "description": "Last name",
+                        "type": "string",
+                        "example": "Ivanov"
+                    },
+                    "first_name": {
+                        "description": "First name",
+                        "type": "string",
+                        "example": "Ivan"
+                    },
+                    "middle_name": {
+                        "description": "Middle name",
+                        "type": "string",
+                        "example": "Ivanovich"
+                    },
+                    "email": {
+                        "description": "Email",
+                        "type": "string",
+                        "example": "ivanov_ivan_91@mail.ru"
+                    },
+                    "phone_number": {
+                        "description": "Phone number",
+                        "type": "number",
+                        "example": "7773332001"
+                    },
+                    "notifier_type": {
+                        "description": "Notifier type",
+                        "type": "number",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "ProvidedServiceResource": {
+                "title": "ProvidedServiceResource",
+                "required": [
+                    "id",
+                    "created_at",
+                    "date_of_service",
+                    "contract_id",
+                    "insured_person_id",
+                    "service_id",
+                    "service_name",
+                    "limit_type",
+                    "quantity",
+                    "price",
+                    "amount"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Provided service id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "description": "Creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "date_of_service": {
+                        "description": "Service provision date in the format YYYY-MM-DD",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-02"
+                    },
+                    "contract_id": {
+                        "description": "Contract id",
+                        "type": "integer",
+                        "example": 256
+                    },
+                    "insured_person_id": {
+                        "description": "Insured person id",
+                        "type": "integer",
+                        "example": 1045
+                    },
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": 89
+                    },
+                    "service_name": {
+                        "description": "Service name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Service name #4"
+                    },
+                    "limit_type": {
+                        "description": "Limit type",
+                        "type": "number",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    },
+                    "quantity": {
+                        "description": "Quantity",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 1
+                    },
+                    "price": {
+                        "description": "Price",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 15000
+                    },
+                    "amount": {
+                        "description": "Amount",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 15000
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceResource": {
+                "title": "ServiceResource",
+                "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Company name",
+                        "type": "string",
+                        "example": "Company name #1"
+                    },
+                    "created_at": {
+                        "description": "Service creation date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2020-01-01 02:43:25"
+                    },
+                    "updated_at": {
+                        "description": "Service change date in the format YYYY-MM-DD HH:mm:ss",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "020-01-02 08:23:11"
+                    }
+                },
+                "type": "object"
+            },
+            "CollectionResponse": {
+                "title": "CollectionResponse",
+                "description": "Collection response",
+                "required": [
+                    "data",
+                    "links",
+                    "meta",
+                    "path",
+                    "per_page",
+                    "total"
+                ],
+                "properties": {
+                    "data": {},
+                    "links": {
+                        "properties": {
+                            "first": {
+                                "description": "URL for the first page",
+                                "type": "string"
+                            },
+                            "last": {
+                                "description": "URL for the last page",
+                                "type": "string"
+                            },
+                            "prev": {
+                                "description": "URL for the previous page",
+                                "type": "string"
+                            },
+                            "next": {
+                                "description": "URL for the next page",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "description": "Current page number",
+                                "type": "integer"
+                            },
+                            "from": {
+                                "description": "First page number",
+                                "type": "integer"
+                            },
+                            "last_page": {
+                                "description": "Last page number",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "path": {
+                        "description": "The base path",
+                        "type": "string"
+                    },
+                    "per_page": {
+                        "description": "The number of items to be shown per page",
+                        "type": "integer"
+                    },
+                    "total": {
+                        "description": "The total number of matching items in the data store",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "EmailValidationErrorResponse": {
+                "title": "CompanyEmailValidationError",
+                "description": "Email validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "email": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The email field is required."
+                                        },
+                                        {
+                                            "example": "The email field must not be greater than 255 characters."
+                                        },
+                                        {
+                                            "example": "The email field must be a valid email address."
+                                        },
+                                        {
+                                            "example": "The email has already been taken."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "NameValidationErrorResponse": {
+                "title": "CompanyNameValidationError",
+                "description": "Name validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The name field is required."
+                                        },
+                                        {
+                                            "example": "The name field must not be greater than 255 characters."
+                                        },
+                                        {
+                                            "example": "The name has already been taken."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "PasswordValidationErrorResponse": {
+                "title": "CompanyPasswordValidationError",
+                "description": "Password validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "password": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The password field is required."
+                                        },
+                                        {
+                                            "example": "The password field must be at least 8 characters."
+                                        },
+                                        {
+                                            "example": "The password field must not be greater than 255 characters."
+                                        },
+                                        {
+                                            "example": "The password field must contain at least one uppercase and one lowercase letter."
+                                        },
+                                        {
+                                            "example": "The password field must contain at least one letter."
+                                        },
+                                        {
+                                            "example": "The password field must contain at least one symbol."
+                                        },
+                                        {
+                                            "example": "The password field must contain at least one number."
+                                        },
+                                        {
+                                            "example": "The password field confirmation does not match."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ContractValidationError": {
+                "title": "ContractValidationError",
+                "description": "Contract validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "number": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The number field is required"
+                                        },
+                                        {
+                                            "example": "The number field must not be greater than 50 characters"
+                                        },
+                                        {
+                                            "example": "The number has already been taken"
+                                        }
+                                    ]
+                                }
+                            },
+                            "start_date": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The start date field is required"
+                                        },
+                                        {
+                                            "example": "The start date field must be a valid date"
+                                        }
+                                    ]
+                                }
+                            },
+                            "end_date": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The end date field is required"
+                                        },
+                                        {
+                                            "example": "The start date field must be a valid date"
+                                        },
+                                        {
+                                            "example": "The end date field must be a date after or equal to start date"
+                                        }
+                                    ]
+                                }
+                            },
+                            "max_amount": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The max amount field is required"
+                                        },
+                                        {
+                                            "example": "The max amount field must be at least 0"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "LimitValidationError": {
+                "title": "LimitValidationError",
+                "description": "Limit validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "limit_type": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The limit type field is required"
+                                        },
+                                        {
+                                            "example": "The selected limit type is invalid"
+                                        }
+                                    ]
+                                }
+                            },
+                            "limit_value": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The limit value field is required"
+                                        },
+                                        {
+                                            "example": "The limit value field must be at least 0"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceIdValidationError": {
+                "title": "ServiceIdValidationError",
+                "description": "Service id validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "service_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The service id field is required"
+                                        },
+                                        {
+                                            "example": "The selected service id is invalid"
+                                        },
+                                        {
+                                            "example": "The service id has already been taken"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "DebtorsValidationError": {
+                "title": "DebtorsValidationError",
+                "description": "Debtors validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "page": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The page field is required"
+                                        },
+                                        {
+                                            "example": "The page field must be an integer"
+                                        },
+                                        {
+                                            "example": "The page field must be at least 1"
+                                        }
+                                    ]
+                                }
+                            },
+                            "service_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The selected service id is invalid"
+                                        },
+                                        {
+                                            "example": "The service id field must be an integer"
+                                        }
+                                    ]
+                                }
+                            },
+                            "debt_from": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The debt from field must be an integer"
+                                        },
+                                        {
+                                            "example": "The debt from field must be greater than 0"
+                                        }
+                                    ]
+                                }
+                            },
+                            "debt_to": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The debt to field must be an integer"
+                                        },
+                                        {
+                                            "example": "The debt to field must be greater than 0"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "PersonIdValidationError": {
+                "title": "PersonIdValidationError",
+                "description": "Insured person id validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "person_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The person id field is required"
+                                        },
+                                        {
+                                            "example": "The person id has already been taken"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "InsuredPersonValidationError": {
+                "title": "InsuredPersonValidationError",
+                "description": "Insured person validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "policy_number": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The policy number field is required"
+                                        },
+                                        {
+                                            "example": "The policy number has already been taken"
+                                        }
+                                    ]
+                                }
+                            },
+                            "is_allowed_to_exceed_limit": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The is allowed to exceed limit field is required"
+                                        },
+                                        {
+                                            "example": "The is allowed to exceed limit field must be true or false"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "InvalidTokenResponse": {
+                "description": "Invalid token"
+            },
+            "PersonValidationError": {
+                "title": "PersonValidationError",
+                "description": "Person validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "last_name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The middle name field is required"
+                                        },
+                                        {
+                                            "example": "The middle name field must not be greater than 255 characters"
+                                        }
+                                    ]
+                                }
+                            },
+                            "first_name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The middle name field is required"
+                                        },
+                                        {
+                                            "example": "The middle name field must not be greater than 255 characters"
+                                        }
+                                    ]
+                                }
+                            },
+                            "middle_name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The middle name field is required"
+                                        },
+                                        {
+                                            "example": "The middle name field must not be greater than 255 characters"
+                                        }
+                                    ]
+                                }
+                            },
+                            "email": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The email field must not be greater than 255 characters"
+                                        },
+                                        {
+                                            "example": "The email has already been taken"
+                                        },
+                                        {
+                                            "example": "The email field must be a valid email address"
+                                        },
+                                        {
+                                            "example": "The email field is required when notifier type is 0"
+                                        }
+                                    ]
+                                }
+                            },
+                            "phone_number": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The phone number field must not be greater than 15 characters"
+                                        },
+                                        {
+                                            "example": "The phone number has already been taken"
+                                        },
+                                        {
+                                            "example": "The phone number field is required when notifier type is 1"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ProvidedServiceValidationError": {
+                "title": "ProvidedServiceValidationError",
+                "description": "Provided service validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "service_id": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The service id field is required"
+                                        }
+                                    ]
+                                }
+                            },
+                            "date_of_service": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The date of service field is required"
+                                        },
+                                        {
+                                            "example": "The date of service field must be a valid date"
+                                        }
+                                    ]
+                                }
+                            },
+                            "quantity": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The quantity field is required"
+                                        },
+                                        {
+                                            "example": "The quantity field must be greater than 0"
+                                        }
+                                    ]
+                                }
+                            },
+                            "price": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The price field is required"
+                                        },
+                                        {
+                                            "example": "The quantity field must be greater than 0"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceNameValidationErrorResponse": {
+                "title": "ServiceNameValidationError",
+                "description": "Name validation error",
+                "required": [
+                    "errors"
+                ],
+                "properties": {
+                    "errors": {
+                        "properties": {
+                            "name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "anyOf": [
+                                        {
+                                            "example": "The name field is required."
+                                        },
+                                        {
+                                            "example": "The name field must not be greater than 255 characters."
+                                        },
+                                        {
+                                            "example": "The name has already been taken."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ChangeEmailCommand": {
+                "title": "ChangeEmailCommand",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "description": "Email",
+                        "type": "string",
+                        "format": "email",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "tester@test.app"
+                    }
+                },
+                "type": "object"
+            },
+            "ChangePasswordCommand": {
+                "title": "ChangePasswordCommand",
+                "required": [
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "password": {
+                        "description": "Password",
+                        "type": "string",
+                        "format": "password",
+                        "default": "",
+                        "maxLength": 255,
+                        "minLength": 8,
+                        "example": "123b5-7A11"
+                    },
+                    "password_confirmation": {
+                        "description": "Password confirmation",
+                        "type": "string",
+                        "format": "password",
+                        "default": "",
+                        "maxLength": 255,
+                        "minLength": 8,
+                        "example": "123b5-7A11"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterCommand": {
+                "title": "RegisterCommand",
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Company name",
+                        "type": "string",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "Company name #1"
+                    },
+                    "email": {
+                        "description": "Email",
+                        "type": "string",
+                        "format": "email",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "tester@gmail.com"
+                    },
+                    "password": {
+                        "description": "Password",
+                        "type": "string",
+                        "format": "password",
+                        "default": "",
+                        "maxLength": 255,
+                        "minLength": 8,
+                        "example": "123b5-7A1"
+                    },
+                    "password_confirmation": {
+                        "description": "Password confirmation",
+                        "type": "string",
+                        "format": "password",
+                        "default": "",
+                        "maxLength": 255,
+                        "minLength": 8,
+                        "example": "123b5-7A1"
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyUpdateCommand": {
+                "title": "CompanyUpdateCommand",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Company name",
+                        "type": "string",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "New company name"
+                    }
+                },
+                "type": "object"
+            },
+            "ContractAddCommand": {
+                "title": "ContractAddCommand",
+                "required": [
+                    "number",
+                    "start_date",
+                    "end_date",
+                    "max_amount"
+                ],
+                "properties": {
+                    "number": {
+                        "description": "Contract number",
+                        "type": "string",
+                        "maxLength": 50,
+                        "example": "DK-12-01"
+                    },
+                    "start_date": {
+                        "description": "Contract start date",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-01-01"
+                    },
+                    "end_date": {
+                        "description": "Contract end date",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-12-31"
+                    },
+                    "max_amount": {
+                        "description": "Max amount",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 1234516
+                    }
+                },
+                "type": "object"
+            },
+            "ContractUpdateCommand": {
+                "title": "ContractUpdateCommand",
+                "required": [
+                    "number",
+                    "start_date",
+                    "end_date",
+                    "max_amount"
+                ],
+                "properties": {
+                    "number": {
+                        "description": "Contract number",
+                        "type": "string",
+                        "maxLength": 50,
+                        "example": "DK-12-01"
+                    },
+                    "start_date": {
+                        "description": "Contract start date",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-01-01"
+                    },
+                    "end_date": {
+                        "description": "Contract end date",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-12-31"
+                    },
+                    "max_amount": {
+                        "description": "Max amount",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 1234516
+                    }
+                },
+                "type": "object"
+            },
+            "ContractServiceAddCommand": {
+                "title": "ContractServiceAddCommand",
+                "required": [
+                    "service_id",
+                    "limit_type",
+                    "limit_value"
+                ],
+                "properties": {
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "limit_type": {
+                        "description": "Limit type (0 - on amount, 1 - on quantity)",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    },
+                    "limit_value": {
+                        "description": "Limit value",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "ContractServiceUpdateCommand": {
+                "title": "ContractServiceUpdateCommand",
+                "required": [
+                    "limit_type",
+                    "limit_value"
+                ],
+                "properties": {
+                    "limit_type": {
+                        "description": "Limit type",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    },
+                    "limit_value": {
+                        "description": "Limit value",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "InsuredPersonAddCommand": {
+                "title": "InsuredPersonAddCommand",
+                "required": [
+                    "person_id",
+                    "policy_number",
+                    "is_allowed_to_exceed_limit"
+                ],
+                "properties": {
+                    "person_id": {
+                        "description": "Person id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "policy_number": {
+                        "description": "Policy number",
+                        "type": "string",
+                        "maxLength": 30,
+                        "example": "SDD-01"
+                    },
+                    "is_allowed_to_exceed_limit": {
+                        "description": "Determines whether it is allowed to exceed the limits or not",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "InsuredPersonUpdateCommand": {
+                "title": "InsuredPersonUpdateCommand",
+                "required": [
+                    "policy_number",
+                    "is_allowed_to_exceed_limit"
+                ],
+                "properties": {
+                    "policy_number": {
+                        "description": "Policy number",
+                        "type": "string",
+                        "maxLength": 30,
+                        "example": "SDD-01"
+                    },
+                    "is_allowed_to_exceed_limit": {
+                        "description": "Determines whether it is allowed to exceed the limits or not",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "PersonAddCommand": {
+                "title": "PersonAddCommand",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "middle_name"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "Last name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivanov"
+                    },
+                    "first_name": {
+                        "description": "First name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivan"
+                    },
+                    "middle_name": {
+                        "description": "Middle name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivanovich"
+                    },
+                    "email": {
+                        "description": "Email",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ivanov_ivan_91@gmail.com"
+                    },
+                    "phone_number": {
+                        "description": "Phone number",
+                        "type": "string",
+                        "maxLength": 15,
+                        "example": "7773339011"
+                    },
+                    "notifier_type": {
+                        "description": "Notifier type (0 - on email, 1 - on telegram)",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCommand": {
+                "title": "UpdateCommand",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "middle_name"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "Last name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivanov"
+                    },
+                    "first_name": {
+                        "description": "First name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivan"
+                    },
+                    "middle_name": {
+                        "description": "Middle name",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Ivanovich"
+                    },
+                    "email": {
+                        "description": "Email",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ivanov_ivan_91@gmail.com"
+                    },
+                    "phone_number": {
+                        "description": "Phone number",
+                        "type": "string",
+                        "maxLength": 15,
+                        "example": "7773339011"
+                    },
+                    "notifier_type": {
+                        "description": "Notifier type (0 - on email, 1 - on telegram)",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "ProvidedServiceRegistrationCommand": {
+                "title": "ProvidedServiceRegistrationCommand",
+                "required": [
+                    "service_id",
+                    "date_of_service",
+                    "quantity",
+                    "price"
+                ],
+                "properties": {
+                    "service_id": {
+                        "description": "Service id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date_of_service": {
+                        "description": "Date of service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-01-12"
+                    },
+                    "quantity": {
+                        "description": "Quantity",
+                        "type": "number",
+                        "example": 1
+                    },
+                    "price": {
+                        "description": "Price",
+                        "type": "number",
+                        "example": 1500
+                    }
+                },
+                "type": "object"
+            },
+            "AddCommand": {
+                "title": "AddCommand",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Service name",
+                        "type": "string",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "Service #1"
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceUpdateCommand": {
+                "title": "ServiceUpdateCommand",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Service name",
+                        "type": "string",
+                        "default": "",
+                        "maxLength": 255,
+                        "example": "New service name"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "parameters": {
+            "contractNumber": {
+                "name": "number",
+                "in": "query",
+                "description": "Contract number",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 50
+                }
+            },
+            "periodFrom": {
+                "name": "period_from",
+                "in": "query",
+                "description": "Period from",
+                "schema": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "periodTo": {
+                "name": "period_to",
+                "in": "query",
+                "description": "Period to",
+                "schema": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "maxAmountFrom": {
+                "name": "max_amount_from",
+                "in": "query",
+                "description": "Max amount from",
+                "schema": {
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0
+                }
+            },
+            "maxAmountTo": {
+                "name": "max_amount_to",
+                "in": "query",
+                "description": "Max amount tro",
+                "schema": {
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0
+                }
+            },
+            "contractServiceLimitType": {
+                "name": "limit_type",
+                "in": "query",
+                "description": "Limit type",
+                "schema": {
+                    "type": "number",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                }
+            },
+            "limitValueFrom": {
+                "name": "limit_value_from",
+                "in": "query",
+                "description": "Limit value from",
+                "schema": {
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0
+                }
+            },
+            "limitValueTo": {
+                "name": "limit_value_to",
+                "in": "query",
+                "description": "Limit value to",
+                "schema": {
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0
+                }
+            },
+            "debtFrom": {
+                "name": "debt_from",
+                "in": "query",
+                "description": "Debt from",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "debtTo": {
+                "name": "debt_to",
+                "in": "query",
+                "description": "Debt to",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "policyNumber": {
+                "name": "policy_number",
+                "in": "query",
+                "description": "Policy number",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 30
+                }
+            },
+            "isAllowedToExceedLimit": {
+                "name": "is_allowed_to_exceed_limit",
+                "in": "query",
+                "description": "Is allowed to exceed limit",
+                "schema": {
+                    "type": "number",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                }
+            },
+            "lastName": {
+                "name": "last_name",
+                "in": "query",
+                "description": "Last name",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            },
+            "firstName": {
+                "name": "first_name",
+                "in": "query",
+                "description": "First name",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            },
+            "middleName": {
+                "name": "middle_name",
+                "in": "query",
+                "description": "Middle name",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            },
+            "email": {
+                "name": "email",
+                "in": "query",
+                "description": "Email",
+                "schema": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 255
+                }
+            },
+            "phoneNumber": {
+                "name": "phone_number",
+                "in": "query",
+                "description": "Phone number",
+                "schema": {
+                    "type": "integer",
+                    "maxLength": 15
+                }
+            },
+            "notifierType": {
+                "name": "notifier_type",
+                "in": "query",
+                "description": "Notifier type",
+                "schema": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "nullable": true
+                }
+            },
+            "contractId": {
+                "name": "contractId",
+                "in": "path",
+                "description": "Contract id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "insuredPersonId": {
+                "name": "insuredPersonId",
+                "in": "path",
+                "description": "Insured person id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "personId": {
+                "name": "personId",
+                "in": "path",
+                "description": "Person id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "providedServiceId": {
+                "name": "providedServiceId",
+                "in": "path",
+                "description": "Provided service id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "serviceId": {
+                "name": "serviceId",
+                "in": "path",
+                "description": "Service id",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "amountFrom": {
+                "name": "amount_from",
+                "in": "query",
+                "description": "Amount from",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "amountTo": {
+                "name": "amount_to",
+                "in": "query",
+                "description": "Amount to",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "dateOfServiceFrom": {
+                "name": "date_of_service_from",
+                "in": "query",
+                "description": "Date of service from in the format YYYY-MM-DD",
+                "schema": {
+                    "type": "date"
+                }
+            },
+            "dateOfServiceTo": {
+                "name": "date_of_service_to",
+                "in": "query",
+                "description": "Date of service to in the format YYYY-MM-DD",
+                "schema": {
+                    "type": "date"
+                }
+            },
+            "limitType": {
+                "name": "limit_type",
+                "in": "query",
+                "description": "Limit type",
+                "schema": {
+                    "type": "number",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                }
+            },
+            "pageNumber": {
+                "name": "page",
+                "in": "query",
+                "description": "Page number",
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "example": 1
+                }
+            },
+            "priceFrom": {
+                "name": "price_from",
+                "in": "query",
+                "description": "Price from",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "priceTo": {
+                "name": "price_to",
+                "in": "query",
+                "description": "Price to",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "quantityFrom": {
+                "name": "quantity_from",
+                "in": "query",
+                "description": "Quantity from",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "quantityTo": {
+                "name": "quantity_to",
+                "in": "query",
+                "description": "Quantity to",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "serviceIdInQuery": {
+                "name": "serviceId",
+                "in": "query",
+                "description": "Service id",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "serviceName": {
+                "name": "service_name",
+                "in": "query",
+                "description": "Service name",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            },
+            "emailConfirmToken": {
+                "name": "emailConfirmToken",
+                "in": "path",
+                "description": "Email confirm token",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            },
+            "newEmailConfirmToken": {
+                "name": "newEmailConfirmToken",
+                "in": "path",
+                "description": "New email confirm token",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            }
+        },
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "description": "Basic Authentication",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "basic"
+            },
+            "bearerAuth": {
+                "type": "http",
+                "description": "Bearer Authentication",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Company",
+            "description": "Company"
+        },
+        {
+            "name": "Contracts",
+            "description": "Contracts"
+        },
+        {
+            "name": "Contracts/Services",
+            "description": "Contracts/Services"
+        },
+        {
+            "name": "Debtors",
+            "description": "Debtors"
+        },
+        {
+            "name": "Contracts/Insured persons",
+            "description": "Contracts/Insured persons"
+        },
+        {
+            "name": "Persons",
+            "description": "Persons"
+        },
+        {
+            "name": "Provided services",
+            "description": "Provided services"
+        },
+        {
+            "name": "Services",
+            "description": "Services"
+        }
+    ]
+}

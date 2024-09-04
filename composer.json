@@ -1,0 +1,108 @@
+{
+    "name": "kaivladimirv/insurance-contracts-laravel",
+    "type": "project",
+    "description": "Service for working with insurance contracts.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kaivladimirv/collision"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "darkaonline/l5-swagger": "^8.6",
+        "guzzlehttp/guzzle": "^7.2",
+        "kaivladimirv/laravel-specification-pattern": "^1.0",
+        "laravel-notification-channels/telegram": "^5.0",
+        "laravel/framework": "^10.8",
+        "laravel/sanctum": "^3.2",
+        "laravel/tinker": "^2.8",
+        "rollbar/rollbar-laravel": "^8.0",
+        "spatie/laravel-data": "^4.0",
+        "tkaratug/laravel-notification-event-subscriber": "^1.3",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.0",
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9.1",
+        "hedii/artisan-log-cleaner": "^6.1",
+        "icanhazstring/composer-unused": "^0.8.10",
+        "infection/infection": "^0.27.11",
+        "laravel/pint": "^1.17",
+        "laravel/sail": "^1.18",
+        "laravel/telescope": "^5.1",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^7.10",
+        "phpunit/phpunit": "^10.1",
+        "psalm/plugin-laravel": "^2.8",
+        "psalm/plugin-phpunit": "^0.19.0",
+        "rector/rector": "^1.2",
+        "spatie/laravel-ignition": "^2.0",
+        "squizlabs/php_codesniffer": "^3.7",
+        "vimeo/psalm": "^5.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "run-queue-workers": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan queue:work -v --tries=3 --queue=default,emails,balances"
+        ],
+        "test": [
+            "@test-without-db",
+            "@test-with-db"
+        ],
+        "test-without-db" : [
+            "@php artisan test --without-tty --exclude-testsuite=Database"
+        ],
+        "test-with-db" : [
+            "@php artisan db:create --test",
+            "@php artisan migrate --force --database=pgsql_testing",
+            "@php artisan test --without-tty --testsuite=Database --configuration=phpunit.db.xml"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/telescope"
+            ]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "infection/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

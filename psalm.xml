@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="7"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    findUnnecessaryVarAnnotation="false"
+>
+    <projectFiles>
+        <directory name="app"/>
+        <directory name="database/factories"/>
+        <directory name="database/seeders"/>
+        <directory name="tests"/>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\LaravelPlugin\Plugin"/>
+    </plugins>
+    <issueHandlers>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="App\Console\Commands\*" />
+                <referencedClass name="App\Http\Controllers\*Controller" />
+                <referencedClass name="App\Data\*Cast" />
+                <referencedClass name="App\Data\*Transformer" />
+                <referencedClass name="App\Providers\ProvidedServiceServiceProvider" />
+                <referencedClass name="App\Swagger\Parameters\*" />
+                <referencedClass name="Tests\*Test" />
+                <referencedClass name="Database\Factories\*Factory" />
+                <referencedClass name="Database\Seeders\*Seeder" />
+            </errorLevel>
+        </UnusedClass>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <file name="app/Http/Controllers/*Controller.php" />
+                <file name="app/Listeners/*Subscriber.php" />
+                <referencedMethod name="/App\\Console\\Commands\\[\w\\]+::handle/" />
+                <referencedMethod name="/App\\Http\\Middleware\\[\w\\]+::handle/" />
+                <referencedMethod name="/App\\UseCases\\[\w\\]+Command::__construct/" />
+                <referencedMethod name="/App\\UseCases\\[\w\\]+Command::rules/" />
+                <referencedMethod name="/App\\UseCases\\Balance\\[\w\\]+Handler::__construct/" />
+                <referencedMethod name="App\Providers\AppServiceProvider::boot" />
+                <referencedMethod name="App\Providers\AuthServiceProvider::boot" />
+                <referencedMethod name="App\Models\Service::contractServices" />
+                <referencedMethod name="App\Models\Contract::isExpiredTo" />
+                <referencedMethod name="App\Models\Contract::isIncludeInValidityPeriod" />
+                <referencedMethod name="App\Models\Contract::providedServices" />
+                <referencedMethod name="App\Models\ContractService::service" />
+                <referencedMethod name="App\Models\InsuredPerson::person" />
+                <referencedMethod name="App\Models\InsuredPerson::providedServices" />
+                <referencedMethod name="App\Models\ProvidedService::service" />
+                <referencedMethod name="App\Models\ProvidedService::dateOfService" />
+                <referencedMethod name="App\Specifications\ContractIsValidSpecification::__construct" />
+                <referencedMethod name="App\UseCases\ProvidedService\Registration\RegistrationHandler::__construct" />
+                <referencedMethod name="Database\Factories\BalanceFactory::withQuantityBalanceBetween" />
+                <referencedMethod name="Database\Factories\BalanceFactory::withAmountBalanceBetween" />
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <PossiblyUnusedProperty>
+            <errorLevel type="suppress">
+                <file name="app/UseCases/**/*Command.php" />
+            </errorLevel>
+        </PossiblyUnusedProperty>
+        <UnnecessaryVarAnnotation errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

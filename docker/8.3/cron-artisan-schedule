@@ -1,0 +1,1 @@
+* * * * * root cd /var/www/html && /usr/bin/php artisan schedule:run >> /var/www/html/storage/logs/laravel-scheduler.log 2>> /var/www/html/storage/logs/laravel-scheduler-errors.log
