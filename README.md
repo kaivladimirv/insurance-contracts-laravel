@@ -2,7 +2,7 @@
 [![type coverage](https://shepherd.dev/github/kaivladimirv/insurance-contracts-laravel/coverage.svg)](https://shepherd.dev/github/kaivladimirv/insurance-contracts-laravel)
 [![psalm level](https://shepherd.dev/github/kaivladimirv/insurance-contracts-laravel/level.svg)](https://psalm.dev/)
 [![tests](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/tests.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/tests.yml)
-![Codecov](https://img.shields.io/codecov/c/github/kaivladimirv/insurance-contracts-laravel?token=ilIOxHeSxw)
+![Codecov](https://img.shields.io/codecov/c/github/kaivladimirv/insurance-contracts-laravel?token=PBI5E8fvQm)
 [![unused dependencies](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/unused-dependencies.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/unused-dependencies.yml)
 [![outdated dependencies](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/oudated-dependencies.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/oudated-dependencies.yml)
 [![sast](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/sast.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/sast.yml)
