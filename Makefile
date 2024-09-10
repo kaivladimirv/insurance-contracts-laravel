@@ -1,6 +1,6 @@
 export WWWGROUP := $(shell id -g)
 
-init: init-env docker-down docker-build docker-up composer-install project-init run-queue-workers
+init: init-env docker-down-clear docker-build docker-up composer-install project-init run-queue-workers
 up: docker-up run-queue-workers
 down: docker-down
 restart: down up
