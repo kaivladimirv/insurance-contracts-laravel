@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Notifications\Person;
 
+use Override;
 use App\Notifications\Person\InvitationToJoinChatBot;
 use Database\Factories\PersonFactory;
 use DomainException;
@@ -15,6 +16,7 @@ class InvitationToJoinChatBotTest extends TestCase
     private PersonFactory $personFactory;
     private Notification $notification;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

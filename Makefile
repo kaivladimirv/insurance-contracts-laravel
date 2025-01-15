@@ -47,9 +47,6 @@ composer-validate:
 composer-outdated:
 	vendor/bin/sail composer outdated --direct --major-only --strict
 
-composer-unused:
-	vendor/bin/sail exec laravel.test ./vendor/bin/composer-unused
-
 composer-audit:
 	vendor/bin/sail composer audit
 

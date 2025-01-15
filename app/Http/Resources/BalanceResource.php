@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use Override;
 use App\Enums\LimitType;
 use App\Models\Balance;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class BalanceResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

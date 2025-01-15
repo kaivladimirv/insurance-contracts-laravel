@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use Override;
 use App\Enums\LimitType;
 use App\Models\ContractService;
 use Illuminate\Http\Request;
@@ -66,6 +67,7 @@ class ContractServiceResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

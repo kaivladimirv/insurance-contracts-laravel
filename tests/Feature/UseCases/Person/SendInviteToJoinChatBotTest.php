@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Person;
 
+use Override;
 use App\Enums\NotifierType;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotCommand;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotHandler;
@@ -17,6 +18,7 @@ class SendInviteToJoinChatBotTest extends TestCase
     private PersonFactory $personFactory;
     private SendInviteToJoinChatBotHandler $handler;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

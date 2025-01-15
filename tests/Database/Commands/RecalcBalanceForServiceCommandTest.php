@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Database\Commands;
 
+use Override;
 use App\Console\Commands\RecalcBalancesForService;
 use App\Models\Balance;
 use App\Models\Contract;
@@ -26,6 +27,7 @@ class RecalcBalanceForServiceCommandTest extends TestCase
      */
     private Collection $providedServices;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

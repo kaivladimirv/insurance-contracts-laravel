@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Listeners;
 
+use Override;
 use App\Events\Company\CompanyEmailChanged;
 use App\Events\Company\CompanyPasswordChanged;
 use App\Events\Company\CompanyRegistered;
@@ -17,6 +18,7 @@ class CompanyEventSubscriberTest extends TestCase
 {
     private CompanyEventSubscriber $subscriber;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

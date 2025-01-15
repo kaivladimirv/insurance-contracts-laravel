@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Jobs\Balance;
 
+use Override;
 use App\Jobs\Balance\RecalcBalance;
 use App\Jobs\Balance\RecalcBalancesForService;
 use App\Models\Contract;
@@ -19,6 +20,7 @@ class RecalcBalanceForServiceJobTest extends TestCase
     private ContractService $contractService;
     private int $insuredPersonCount = 3;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

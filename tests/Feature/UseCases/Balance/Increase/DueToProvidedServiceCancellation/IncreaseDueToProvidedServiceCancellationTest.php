@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Balance\Increase\DueToProvidedServiceCancellation;
 
+use Override;
 use App\Enums\NotifierType;
 use App\Models\Balance;
 use App\Models\Contract;
@@ -29,6 +30,7 @@ class IncreaseDueToProvidedServiceCancellationTest extends TestCase
     private InsuredPerson $insuredPerson;
     private ContractService $contractService;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

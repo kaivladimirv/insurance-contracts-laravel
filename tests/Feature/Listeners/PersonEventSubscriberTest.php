@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Listeners;
 
+use Override;
 use App\Enums\NotifierType;
 use App\Events\Person\PersonAdded;
 use App\Events\Person\PersonUpdated;
@@ -21,6 +22,7 @@ class PersonEventSubscriberTest extends TestCase
     private PersonEventSubscriber $subscriber;
     private Person $person;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

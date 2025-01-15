@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Override;
 use App\Specifications\CanProvidedServiceBeRegisteredSpecification;
 use App\Specifications\ContractIsValidSpecification;
 use App\Specifications\DateOfServiceIsIncludedInContractPeriodSpecification;
@@ -19,6 +20,7 @@ use Kaivladimirv\LaravelSpecificationPattern\SpecificationInterface;
 
 class ProvidedServiceServiceProvider extends ServiceProvider implements DeferrableProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->app->when(RegistrationHandler::class)
@@ -27,15 +29,13 @@ class ProvidedServiceServiceProvider extends ServiceProvider implements Deferrab
 
         $this->app->when(CanProvidedServiceBeRegisteredSpecification::class)
             ->needs(SpecificationInterface::class)
-            ->give(function (Application $app) {
-                return [
-                    $app->make(ContractIsValidSpecification::class),
-                    $app->make(ServiceIsCoveredSpecification::class),
-                    $app->make(DateOfServiceIsIncludedInContractPeriodSpecification::class),
-                    $app->make(ServiceDoesNotExceedLimitSpecification::class),
-                    $app->make(MaxAmountUnderContractIsNotExceededSpecification::class)
-                ];
-            });
+            ->give(fn(Application $app) => [
+                $app->make(ContractIsValidSpecification::class),
+                $app->make(ServiceIsCoveredSpecification::class),
+                $app->make(DateOfServiceIsIncludedInContractPeriodSpecification::class),
+                $app->make(ServiceDoesNotExceedLimitSpecification::class),
+                $app->make(MaxAmountUnderContractIsNotExceededSpecification::class)
+            ]);
 
         $currentDate = new DateTimeImmutable();
         $this->app->when(ContractIsValidSpecification::class)
@@ -43,6 +43,7 @@ class ProvidedServiceServiceProvider extends ServiceProvider implements Deferrab
             ->give($currentDate);
     }
 
+    #[Override]
     public function provides(): array
     {
         return [

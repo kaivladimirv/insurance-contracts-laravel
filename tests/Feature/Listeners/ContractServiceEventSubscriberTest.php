@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Listeners;
 
+use Override;
 use App\Events\ContractService\RemoveServiceFromContract;
 use App\Events\ContractService\ServiceAddedToContract;
 use App\Events\ContractService\ServiceUpdatedToContract;
@@ -22,6 +23,7 @@ class ContractServiceEventSubscriberTest extends TestCase
     private ContractServiceEventSubscriber $subscriber;
     private ContractService $contractService;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

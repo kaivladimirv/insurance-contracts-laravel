@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Override;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -34,6 +35,7 @@ class Controller extends BaseController
     /**
      * @throws ReflectionException
      */
+    #[Override]
     public function callAction($method, $parameters)
     {
         if ((new ReflectionMethod($this, $method))->isPublic()) {

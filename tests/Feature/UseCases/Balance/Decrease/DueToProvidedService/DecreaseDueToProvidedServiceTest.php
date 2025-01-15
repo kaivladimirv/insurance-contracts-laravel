@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Balance\Decrease\DueToProvidedService;
 
+use Override;
 use App\Enums\NotifierType;
 use App\Models\Balance;
 use App\Models\Contract;
@@ -26,6 +27,7 @@ class DecreaseDueToProvidedServiceTest extends TestCase
     private ProvidedService $providedService;
     private DecreaseDueToProvidedServiceHandler $handler;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

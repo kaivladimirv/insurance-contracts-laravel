@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Telegram;
 
+use Stringable;
 use App\Models\Person;
 use DomainException;
 
-class InvitationLinkToJoinChatbot
+class InvitationLinkToJoinChatbot implements Stringable
 {
     private const string PREFIX_MESSAGE = 'start=';
 

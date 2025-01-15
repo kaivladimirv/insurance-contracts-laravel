@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Console\Commands;
 
+use Override;
 use App\Console\Commands\ProcessIncomingTelegramUpdates;
 use App\Models\TelegramSetting;
 use App\Services\Telegram\IncomingUpdate\Exceptions\FailedToReceiveIncomingUpdates;
@@ -14,6 +15,7 @@ use Tests\TestCase;
 
 class ProcessIncomingTelegramUpdatesTest extends TestCase
 {
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

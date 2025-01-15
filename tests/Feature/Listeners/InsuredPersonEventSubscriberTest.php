@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Listeners;
 
+use Override;
 use App\Events\InsuredPerson\InsuredPersonAdded;
 use App\Jobs\Balance\RecalcBalancesForInsured;
 use App\Listeners\InsuredPersonEventSubscriber;
@@ -15,6 +16,7 @@ class InsuredPersonEventSubscriberTest extends TestCase
 {
     private InsuredPersonEventSubscriber $subscriber;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Database\Jobs\Balance;
 
+use Override;
 use App\Jobs\Balance\RecalcBalancesForInsured;
 use App\Models\Balance;
 use App\Models\Contract;
@@ -24,6 +25,7 @@ class RecalcBalancesForInsuredJobTest extends TestCase
     private \Illuminate\Support\Collection $providedServices;
     private array $insuredIds;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,9 +39,7 @@ class RecalcBalancesForInsuredJobTest extends TestCase
             ->pluck('id')->map(fn(int $id) => ['insured_person_id' => $id])->all();
 
         $providedServiceFactory = ProvidedServiceFactory::new(['quantity' => 1])->forEachSequence(...$this->insuredIds);
-        $this->providedServices = $this->contractServices->flatMap(function ($contractService) use ($providedServiceFactory) {
-            return $providedServiceFactory->for($contractService)->create();
-        })->collect();
+        $this->providedServices = $this->contractServices->flatMap(fn($contractService) => $providedServiceFactory->for($contractService)->create())->collect();
     }
 
     public function testSuccess(): void

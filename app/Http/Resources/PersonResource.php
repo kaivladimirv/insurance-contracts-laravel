@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use Override;
 use App\Enums\NotifierType;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -84,6 +85,7 @@ class PersonResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

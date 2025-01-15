@@ -3,11 +3,10 @@
 [![psalm level](https://shepherd.dev/github/kaivladimirv/insurance-contracts-laravel/level.svg)](https://psalm.dev/)
 [![tests](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/tests.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/tests.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/kaivladimirv/insurance-contracts-laravel?token=PBI5E8fvQm)
-[![unused dependencies](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/unused-dependencies.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/unused-dependencies.yml)
 [![outdated dependencies](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/oudated-dependencies.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/oudated-dependencies.yml)
 [![sast](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/sast.yml/badge.svg)](https://github.com/kaivladimirv/insurance-contracts-laravel/actions/workflows/sast.yml)
 ![license](https://img.shields.io/badge/license-MIT-green)
-<a href="https://php.net"><img src="https://img.shields.io/badge/php-8.3%2B-%238892BF" alt="PHP Programming Language"></a>
+<a href="https://php.net"><img src="https://img.shields.io/badge/php-8.4%2B-%238892BF" alt="PHP Programming Language"></a>
 
 ## Сервис для работы с договорами страхования
 Сервис позволяет страховым компания
@@ -30,7 +29,7 @@
 ***
 
 ## Требования
-* PHP 8.3+
+* PHP 8.4+
 * Composer 2.6.5+
 * PostgreSQL 15+
 * RabbitMQ 3.13+

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Listeners;
 
+use Override;
 use App\Events\ProvidedService\ProvidedServiceRegistered;
 use App\Events\ProvidedService\RegistrationOfProvidedServiceCanceled;
 use App\Listeners\ProvidedServiceEventSubscriber;
@@ -19,6 +20,7 @@ class ProvidedServiceEventSubscriberTest extends TestCase
     private ProvidedServiceEventSubscriber $subscriber;
     private ProvidedService $providedService;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

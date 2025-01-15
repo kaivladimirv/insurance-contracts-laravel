@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Mail;
 
+use Override;
 use App\Mail\CompanyRegistered;
 use Tests\TestCase;
 
 class CompanyRegisteredTest extends TestCase
 {
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

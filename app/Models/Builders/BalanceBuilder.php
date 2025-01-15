@@ -44,7 +44,7 @@ class BalanceBuilder
     public function build(): Model|Balance
     {
         if (!$this->contractService) {
-            $this->contractId = $this->contractId ?? InsuredPerson::query()->findOrFail($this->insuredPersonId)->contract_id;
+            $this->contractId ??= InsuredPerson::query()->findOrFail($this->insuredPersonId)->contract_id;
             $this->contractService = app(ContractServiceFetcher::class)->getOne($this->contractId, $this->serviceId);
         }
 

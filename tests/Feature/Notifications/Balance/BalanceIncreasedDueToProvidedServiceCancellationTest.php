@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Notifications\Balance;
 
+use Override;
 use App\Notifications\Balance\BalanceIncreasedDueToProvidedServiceCancellation;
 use Database\Factories\BalanceFactory;
 use Database\Factories\ContractServiceFactory;
@@ -16,6 +17,7 @@ class BalanceIncreasedDueToProvidedServiceCancellationTest extends TestCase
 {
     private Notification $notification;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
