@@ -28,19 +28,17 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "hedii/artisan-log-cleaner": "^6.1",
-        "icanhazstring/composer-unused": "^0.8.10",
-        "infection/infection": "^0.27.11",
+        "infection/infection": "^0.29.10",
         "laravel/pint": "^1.17",
         "laravel/sail": "^1.18",
         "laravel/telescope": "^5.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.10",
         "phpunit/phpunit": "^10.1",
-        "psalm/plugin-phpunit": "^0.19.0",
         "rector/rector": "^2.0",
         "spatie/laravel-ignition": "^2.0",
         "squizlabs/php_codesniffer": "^3.7",
-        "vimeo/psalm": "^5.15"
+        "vimeo/psalm": "dev-master"
     },
     "autoload": {
         "psr-4": {
