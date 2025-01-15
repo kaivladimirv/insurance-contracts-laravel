@@ -24,7 +24,7 @@
                 <referencedClass name="App\Http\Controllers\*Controller"/>
                 <referencedClass name="App\Data\*Cast"/>
                 <referencedClass name="App\Data\*Transformer"/>
-                <referencedClass name="App\Providers\ProvidedServiceServiceProvider"/>
+                <referencedClass name="App\Providers\*Provider"/>
                 <referencedClass name="App\Swagger\Parameters\*"/>
                 <referencedClass name="Tests\*Test"/>
                 <referencedClass name="Database\Factories\*Factory"/>
@@ -55,6 +55,9 @@
                 <referencedMethod name="App\UseCases\ProvidedService\Registration\RegistrationHandler::__construct"/>
                 <referencedMethod name="Database\Factories\BalanceFactory::withQuantityBalanceBetween"/>
                 <referencedMethod name="Database\Factories\BalanceFactory::withAmountBalanceBetween"/>
+                <referencedMethod name="Database\Factories\BalanceFactory::withAmountBalanceBetween"/>
+                <referencedMethod name="/App\\Jobs\\[\w\\]+::handle/"/>
+                <referencedMethod name="/App\\Notifications\\[\w\\]+::via/"/>
             </errorLevel>
         </PossiblyUnusedMethod>
         <PossiblyUnusedProperty>
