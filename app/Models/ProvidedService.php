@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
+use Database\Factories\ProvidedServiceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  */
 class ProvidedService extends Model
 {
+    /** @use HasFactory<ProvidedServiceFactory> */
     use HasFactory;
     use SoftDeletes;
     use SerializeDate;

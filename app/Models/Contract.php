@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\SerializeDate;
+use Database\Factories\ContractFactory;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  */
 class Contract extends Model
 {
+    /** @use HasFactory<ContractFactory> */
     use HasFactory;
     use SoftDeletes;
     use SerializeDate;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\SerializeDate;
+use Database\Factories\InsuredPersonFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  */
 class InsuredPerson extends Model
 {
+    /** @use HasFactory<InsuredPersonFactory> */
     use HasFactory;
     use SerializeDate;
 

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\NotifierType;
 use App\Enums\TelegramChatStatus;
 use App\Models\Traits\SerializeDate;
+use Database\Factories\PersonFactory;
 use DomainException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  */
 class Person extends Model
 {
+    /** @use HasFactory<PersonFactory> */
     use HasFactory;
     use SerializeDate;
     use Notifiable;

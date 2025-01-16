@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
+use Database\Factories\BalanceFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,7 @@ use InvalidArgumentException;
  */
 class Balance extends Model
 {
+    /** @use HasFactory<BalanceFactory> */
     use HasFactory;
     use SerializeDate;
 

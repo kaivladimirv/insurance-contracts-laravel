@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
+use Database\Factories\ContractServiceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  */
 class ContractService extends Model
 {
+    /** @use HasFactory<ContractServiceFactory> */
     use HasFactory;
     use SerializeDate;
 
