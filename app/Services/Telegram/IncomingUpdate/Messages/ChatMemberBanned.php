@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Telegram\IncomingUpdate\Messages;
 
 use App\Services\Telegram\IncomingUpdate\Exceptions\InvalidMessageData;
+use Override;
 
 class ChatMemberBanned extends AbstractMessage
 {
     /**
      * @throws InvalidMessageData
      */
+    #[Override]
     public static function createFromArray(array $incomingUpdate): self
     {
         if (!self::is($incomingUpdate)) {

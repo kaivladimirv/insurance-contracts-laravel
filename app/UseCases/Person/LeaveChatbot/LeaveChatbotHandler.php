@@ -7,6 +7,7 @@ namespace App\UseCases\Person\LeaveChatbot;
 use App\ReadModels\PersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class LeaveChatbotHandler implements CommandHandler
 {
@@ -17,6 +18,7 @@ readonly class LeaveChatbotHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(LeaveChatbotCommand|Command $command): void
     {
         $person = $this->fetcher->getOneByTelegramChaId($command->chatId);

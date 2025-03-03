@@ -11,6 +11,7 @@ use App\ReadModels\ContractServiceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Kaivladimirv\LaravelSpecificationPattern\SpecificationInterface;
+use Override;
 
 readonly class RegistrationHandler implements CommandHandler
 {
@@ -21,6 +22,7 @@ readonly class RegistrationHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(RegistrationCommand|Command $command): int
     {
         $providedService = $this->buildProvidedService($command);

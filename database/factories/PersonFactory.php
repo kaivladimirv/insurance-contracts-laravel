@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @extends Factory<Person>
@@ -21,6 +22,7 @@ class PersonFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         return [

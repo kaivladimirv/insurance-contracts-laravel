@@ -8,6 +8,7 @@ use App\Enums\LimitType;
 use App\Models\Balance;
 use App\Models\ContractService;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Override;
 
 /**
  * @extends Factory<Balance>
@@ -24,6 +25,7 @@ class BalanceFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         /** @var LimitType $limitType */
@@ -61,6 +63,7 @@ class BalanceFactory extends Factory
         );
     }
 
+    #[Override]
     public function for($factory, $relationship = null): self
     {
         if ($factory instanceof ContractService) {

@@ -8,9 +8,11 @@ use App\Models\Company;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Laravel\Sanctum\NewAccessToken;
+use Override;
 
 readonly class CreateTokenHandler implements CommandHandler
 {
+    #[Override]
     public function handle(CreateTokenCommand|Command $command): NewAccessToken
     {
         /** @var Company $company */

@@ -7,9 +7,11 @@ namespace App\UseCases\Balance\Remove;
 use App\Models\Balance;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class RemoveBalancesForServiceHandler implements CommandHandler
 {
+    #[Override]
     public function handle(RemoveBalancesForServiceCommand|Command $command): void
     {
         Balance::byContractAndService($command->contract_id, $command->service_id)->delete();

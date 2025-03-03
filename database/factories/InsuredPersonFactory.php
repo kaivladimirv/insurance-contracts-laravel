@@ -8,6 +8,7 @@ use App\Models\Contract;
 use App\Models\InsuredPerson;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Override;
 
 /**
  * @extends Factory<InsuredPerson>
@@ -19,6 +20,7 @@ class InsuredPersonFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         return [

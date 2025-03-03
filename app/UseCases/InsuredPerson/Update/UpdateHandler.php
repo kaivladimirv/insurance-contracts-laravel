@@ -7,6 +7,7 @@ namespace App\UseCases\InsuredPerson\Update;
 use App\ReadModels\InsuredPersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
@@ -17,6 +18,7 @@ readonly class UpdateHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
         $insuredPerson = $this->fetcher->getOne($command->contract_id, $command->insured_person_id);

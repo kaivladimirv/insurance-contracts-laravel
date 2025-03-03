@@ -10,6 +10,7 @@ use App\UseCases\Person\LeaveChatbot\LeaveChatbotCommand;
 use App\UseCases\Person\LeaveChatbot\LeaveChatbotHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Override;
 
 readonly class ChatMemberBannedHandler implements MessageHandler
 {
@@ -20,6 +21,7 @@ readonly class ChatMemberBannedHandler implements MessageHandler
     {
     }
 
+    #[Override]
     public function handle(MessageInterface|ChatMemberBanned $message): void
     {
         try {

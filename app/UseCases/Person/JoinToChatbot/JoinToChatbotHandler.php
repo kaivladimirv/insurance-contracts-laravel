@@ -7,6 +7,7 @@ namespace App\UseCases\Person\JoinToChatbot;
 use App\ReadModels\PersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class JoinToChatbotHandler implements CommandHandler
 {
@@ -17,6 +18,7 @@ readonly class JoinToChatbotHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(JoinToChatbotCommand|Command $command): void
     {
         $person = $this->fetcher->getOneByInviteToken($command->inviteToken);

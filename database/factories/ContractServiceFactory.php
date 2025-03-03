@@ -10,6 +10,7 @@ use App\Models\Contract;
 use App\Models\ContractService;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Override;
 
 /**
  * @extends Factory<ContractService>
@@ -21,6 +22,7 @@ class ContractServiceFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         return [
@@ -31,6 +33,7 @@ class ContractServiceFactory extends Factory
         ];
     }
 
+    #[Override]
     public function for($factory, $relationship = null): self
     {
         $self =  parent::for($factory, $relationship);

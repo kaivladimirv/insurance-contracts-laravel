@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\ReadModels\CompanyFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class ConfirmEmailChangeHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ readonly class ConfirmEmailChangeHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(ConfirmEmailChangeCommand|Command $command): void
     {
         /** @var Company $company */

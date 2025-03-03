@@ -8,6 +8,7 @@ use App\Events\ContractService\RemoveServiceFromContract;
 use App\ReadModels\ContractServiceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class DeleteHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ readonly class DeleteHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(DeleteCommand|Command $command): void
     {
         $contractService = $this->contractServiceFetcher->getOne($command->contract_id, $command->service_id);

@@ -9,6 +9,7 @@ use App\Models\ContractService;
 use App\Models\ProvidedService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @extends Factory<ProvidedService>
@@ -20,6 +21,7 @@ class ProvidedServiceFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         return [
@@ -31,6 +33,7 @@ class ProvidedServiceFactory extends Factory
         ];
     }
 
+    #[Override]
     public function for($factory, $relationship = null): self
     {
         if ($this->isContractService($factory)) {
@@ -60,6 +63,7 @@ class ProvidedServiceFactory extends Factory
         });
     }
 
+    #[Override]
     public function configure(): static
     {
         return $this->afterMaking(function (ProvidedService $providedService) {

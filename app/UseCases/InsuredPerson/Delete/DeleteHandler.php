@@ -9,6 +9,7 @@ use App\Models\Balance;
 use App\ReadModels\InsuredPersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class DeleteHandler implements CommandHandler
 {
@@ -22,6 +23,7 @@ readonly class DeleteHandler implements CommandHandler
     /**
      * @throws InUse
      */
+    #[Override]
     public function handle(DeleteCommand|Command $command): void
     {
         $insuredPerson = $this->fetcher->getOne($command->contract_id, $command->insured_person_id);

@@ -9,6 +9,7 @@ use App\ReadModels\CompanyFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Validation\ValidationException;
+use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
@@ -22,6 +23,7 @@ readonly class UpdateHandler implements CommandHandler
     /**
      * @throws ValidationException
      */
+    #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
         /** @var Company $company */

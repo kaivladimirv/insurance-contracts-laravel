@@ -8,9 +8,11 @@ use App\Events\Person\PersonAdded;
 use App\Models\Person;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class AddHandler implements CommandHandler
 {
+    #[Override]
     public function handle(AddCommand|Command $command): int
     {
         $person = new Person();

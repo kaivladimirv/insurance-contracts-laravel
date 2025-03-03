@@ -8,6 +8,7 @@ use App\Exceptions\Balance\RecalculationOfBalance;
 use App\Services\RecalcBalancesForInsured;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 class RecalcBalanceByInsuredHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ class RecalcBalanceByInsuredHandler implements CommandHandler
     /**
      * @throws RecalculationOfBalance
      */
+    #[Override]
     public function handle(RecalcBalanceByInsuredCommand|Command $command): void
     {
         $this->recalculator->recalc($command->insured_person_id);

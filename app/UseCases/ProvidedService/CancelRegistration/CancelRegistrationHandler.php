@@ -8,6 +8,7 @@ use App\Events\ProvidedService\RegistrationOfProvidedServiceCanceled;
 use App\ReadModels\ProvidedServiceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class CancelRegistrationHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ readonly class CancelRegistrationHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(CancelRegistrationCommand|Command $command): void
     {
         $providedService = $this->fetcher->getOne($command->insured_person_id, $command->id);

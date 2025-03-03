@@ -11,9 +11,11 @@ use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use DomainException;
 use Illuminate\Support\Str;
+use Override;
 
 readonly class SendInviteToJoinChatBotHandler implements CommandHandler
 {
+    #[Override]
     public function handle(SendInviteToJoinChatBotCommand|Command $command): void
     {
         /** @var Person $person */

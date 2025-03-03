@@ -10,6 +10,7 @@ use App\UseCases\Person\JoinToChatbot\JoinToChatbotCommand;
 use App\UseCases\Person\JoinToChatbot\JoinToChatbotHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Override;
 
 readonly class ConfirmationJoinChatbotHandler implements MessageHandler
 {
@@ -20,6 +21,7 @@ readonly class ConfirmationJoinChatbotHandler implements MessageHandler
     {
     }
 
+    #[Override]
     public function handle(MessageInterface|ConfirmationJoinChatbot $message): void
     {
         try {

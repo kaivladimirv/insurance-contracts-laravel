@@ -10,9 +10,11 @@ use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Override;
 
 readonly class RegisterHandler implements CommandHandler
 {
+    #[Override]
     public function handle(RegisterCommand|Command $command): void
     {
         $company = new Company();

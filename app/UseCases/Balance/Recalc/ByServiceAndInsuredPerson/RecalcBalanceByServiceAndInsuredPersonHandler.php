@@ -11,6 +11,7 @@ use App\Services\BalanceCalculator;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 readonly class RecalcBalanceByServiceAndInsuredPersonHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ readonly class RecalcBalanceByServiceAndInsuredPersonHandler implements CommandH
     {
     }
 
+    #[Override]
     public function handle(RecalcBalanceByServiceAndInsuredPersonCommand|Command $command): void
     {
         $calculatedBalanceValue = $this->balanceCalculator->calcByServiceAndInsuredPerson(

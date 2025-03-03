@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Telegram;
 
+use Override;
 use Stringable;
 use App\Models\Person;
 use DomainException;
@@ -30,6 +31,7 @@ class InvitationLinkToJoinChatbot implements Stringable
         return $self;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return config('services.telegram-bot-api.url') . '?' . self::PREFIX_MESSAGE . $this->inviteToken;

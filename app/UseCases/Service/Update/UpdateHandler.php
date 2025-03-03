@@ -7,9 +7,11 @@ namespace App\UseCases\Service\Update;
 use App\Models\Service;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
+    #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
 

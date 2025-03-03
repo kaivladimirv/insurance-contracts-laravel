@@ -8,6 +8,7 @@ use App\Exceptions\Balance\RecalculationOfBalance;
 use App\Services\RecalcBalancesForService;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class RecalcBalanceByServiceHandler implements CommandHandler
 {
@@ -18,6 +19,7 @@ readonly class RecalcBalanceByServiceHandler implements CommandHandler
     /**
      * @throws RecalculationOfBalance
      */
+    #[Override]
     public function handle(RecalcBalanceByServiceCommand|Command $command): void
     {
         $this->recalculator->recalc($command->contract_id, $command->service_id);

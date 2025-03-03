@@ -7,6 +7,7 @@ namespace App\UseCases\Contract\Update;
 use App\ReadModels\ContractFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
@@ -17,6 +18,7 @@ readonly class UpdateHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
         $contract = $this->fetcher->getOne($command->company_id, $command->id);

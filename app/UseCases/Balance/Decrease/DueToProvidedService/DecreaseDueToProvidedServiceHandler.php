@@ -12,6 +12,7 @@ use App\ReadModels\BalanceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class DecreaseDueToProvidedServiceHandler implements CommandHandler
 {
@@ -19,6 +20,7 @@ class DecreaseDueToProvidedServiceHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(DecreaseDueToProvidedServiceCommand|Command $command): void
     {
         /** @var ProvidedService $providedService */

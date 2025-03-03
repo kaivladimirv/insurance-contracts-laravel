@@ -8,6 +8,7 @@ use App\Exceptions\InUse;
 use App\ReadModels\ServiceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class DeleteHandler implements CommandHandler
 {
@@ -21,6 +22,7 @@ readonly class DeleteHandler implements CommandHandler
     /**
      * @throws InUse
      */
+    #[Override]
     public function handle(DeleteCommand|Command $command): void
     {
         $service = $this->fetcher->getOne($command->company_id, $command->id);

@@ -10,6 +10,7 @@ use App\ReadModels\ContractServiceFetcher;
 use App\ReadModels\ProvidedServiceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
@@ -23,6 +24,7 @@ readonly class UpdateHandler implements CommandHandler
     /**
      * @throws InUse
      */
+    #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
         $contractService = $this->contractServiceFetcher->getOne($command->contract_id, $command->service_id);

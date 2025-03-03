@@ -7,9 +7,11 @@ namespace App\UseCases\Service\Add;
 use App\Models\Service;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class AddHandler implements CommandHandler
 {
+    #[Override]
     public function handle(AddCommand|Command $command): int
     {
         $service = new Service();

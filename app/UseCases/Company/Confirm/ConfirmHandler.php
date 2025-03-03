@@ -7,6 +7,7 @@ namespace App\UseCases\Company\Confirm;
 use App\ReadModels\CompanyFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class ConfirmHandler implements CommandHandler
 {
@@ -17,6 +18,7 @@ readonly class ConfirmHandler implements CommandHandler
     {
     }
 
+    #[Override]
     public function handle(ConfirmCommand|Command $command): void
     {
         $company = $this->fetcher->getOneByEmailConfirmToken($command->emailConfirmToken);

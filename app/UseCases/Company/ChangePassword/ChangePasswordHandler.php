@@ -10,12 +10,14 @@ use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Override;
 
 readonly class ChangePasswordHandler implements CommandHandler
 {
     /**
      * @throws ValidationException
      */
+    #[Override]
     public function handle(ChangePasswordCommand|Command $command): void
     {
         /** @var Company $company */

@@ -8,9 +8,11 @@ use App\Events\InsuredPerson\InsuredPersonAdded;
 use App\Models\InsuredPerson;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class AddHandler implements CommandHandler
 {
+    #[Override]
     public function handle(AddCommand|Command $command): int
     {
         $insuredPerson = new InsuredPerson();

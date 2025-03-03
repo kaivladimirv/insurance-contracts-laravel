@@ -6,6 +6,7 @@ namespace App\Services\Telegram\IncomingUpdate\Messages;
 
 use App\Services\Telegram\IncomingUpdate\Exceptions\InvalidMessageData;
 use Illuminate\Support\Str;
+use Override;
 
 class ConfirmationJoinChatbot extends AbstractMessage
 {
@@ -16,6 +17,7 @@ class ConfirmationJoinChatbot extends AbstractMessage
     /**
      * @throws InvalidMessageData
      */
+    #[Override]
     public static function createFromArray(array $incomingUpdate): self
     {
         if (!self::is($incomingUpdate)) {

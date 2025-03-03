@@ -8,9 +8,11 @@ use App\Events\ContractService\ServiceAddedToContract;
 use App\Models\ContractService;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
+use Override;
 
 readonly class AddHandler implements CommandHandler
 {
+    #[Override]
     public function handle(AddCommand|Command $command): void
     {
         $contractService = new ContractService();

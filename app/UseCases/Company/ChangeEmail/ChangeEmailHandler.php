@@ -11,6 +11,7 @@ use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Override;
 
 readonly class ChangeEmailHandler implements CommandHandler
 {
@@ -24,6 +25,7 @@ readonly class ChangeEmailHandler implements CommandHandler
     /**
      * @throws ValidationException
      */
+    #[Override]
     public function handle(ChangeEmailCommand|Command $command): void
     {
         /** @var Company $company */
