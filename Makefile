@@ -1,6 +1,6 @@
 export WWWGROUP := $(shell id -g)
 
-init: init-env docker-down-clear docker-build docker-up composer-install project-init run-queue-workers
+init: init-env docker-down-clear docker-build composer-install docker-up project-init run-queue-workers
 up: docker-up run-queue-workers
 down: docker-down
 restart: down up
@@ -39,7 +39,7 @@ run-queue-workers:
 	vendor/bin/sail composer run-script run-queue-workers
 
 composer-install:
-	docker compose exec laravel.test composer install
+	docker compose run --rm composer composer install
 
 composer-validate:
 	vendor/bin/sail composer validate
