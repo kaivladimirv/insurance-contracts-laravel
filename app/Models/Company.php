@@ -22,11 +22,11 @@ use Override;
  * @property string $name
  * @property string $email
  * @property string $password_hash
- * @property string $email_confirm_token
+ * @property ?string $email_confirm_token
  * @property bool $is_email_confirmed
  * @property int $id
- * @property string $new_email
- * @property string $new_email_confirm_token
+ * @property ?string $new_email
+ * @property ?string $new_email_confirm_token
  * @method static create(array $array)
  */
 class Company extends Authenticatable
