@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Listeners\BalanceEventSubscriber;
 use App\Listeners\CompanyEventSubscriber;
 use App\Listeners\ContractServiceEventSubscriber;
 use App\Listeners\InsuredPersonEventSubscriber;
@@ -34,7 +35,8 @@ class EventServiceProvider extends ServiceProvider
         ContractServiceEventSubscriber::class,
         ProvidedServiceEventSubscriber::class,
         PersonEventSubscriber::class,
-        InsuredPersonEventSubscriber::class
+        InsuredPersonEventSubscriber::class,
+        BalanceEventSubscriber::class
     ];
 
     /**

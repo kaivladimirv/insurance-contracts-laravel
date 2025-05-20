@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Balance\Decrease\DueToProvidedService;
 
+use App\Events\Balance\BalanceWasDecreasedDueToProvidedService;
+use Illuminate\Support\Facades\Event;
 use Override;
 use App\Enums\NotifierType;
 use App\Models\Balance;
 use App\Models\Contract;
 use App\Models\ProvidedService;
 use App\Models\Service;
-use App\Notifications\Balance\BalanceDecreasedDueToProvidedService;
 use App\UseCases\Balance\Decrease\DueToProvidedService\DecreaseDueToProvidedServiceCommand;
 use App\UseCases\Balance\Decrease\DueToProvidedService\DecreaseDueToProvidedServiceHandler;
 use Database\Factories\BalanceFactory;
@@ -19,7 +20,6 @@ use Database\Factories\InsuredPersonFactory;
 use Database\Factories\PersonFactory;
 use Database\Factories\ProvidedServiceFactory;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class DecreaseDueToProvidedServiceTest extends TestCase
@@ -52,7 +52,7 @@ class DecreaseDueToProvidedServiceTest extends TestCase
 
     public function testSuccess(): void
     {
-        Notification::fake();
+        Event::fake();
         BalanceFactory::new()->for($this->insuredPerson)->for($this->contractService)->createOne();
 
         $command = new DecreaseDueToProvidedServiceCommand($this->providedService->id);
@@ -68,12 +68,12 @@ class DecreaseDueToProvidedServiceTest extends TestCase
             ]
         );
 
-        Notification::assertSentTo($this->insuredPerson->person, BalanceDecreasedDueToProvidedService::class);
+        Event::assertDispatched(BalanceWasDecreasedDueToProvidedService::class);
     }
 
     public function testIfBalanceIsNotFilledSuccess(): void
     {
-        Notification::fake();
+        Event::fake();
 
         $command = new DecreaseDueToProvidedServiceCommand($this->providedService->id);
         $this->handler->handle($command);
@@ -88,6 +88,6 @@ class DecreaseDueToProvidedServiceTest extends TestCase
             ]
         );
 
-        Notification::assertSentTo($this->insuredPerson->person, BalanceDecreasedDueToProvidedService::class);
+        Event::assertDispatched(BalanceWasDecreasedDueToProvidedService::class);
     }
 }

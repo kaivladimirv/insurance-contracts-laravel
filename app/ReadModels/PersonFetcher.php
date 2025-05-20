@@ -40,6 +40,15 @@ class PersonFetcher
             ->firstOrFail();
     }
 
+    public function getOneByInsuredPersonId(int $insuredPersonId): Model|Builder|Person
+    {
+        return Person::query()
+            ->select('persons.*')
+            ->join('insured_persons', 'insured_persons.person_id', '=', 'persons.id')
+            ->where('insured_persons.id', '=', $insuredPersonId)
+            ->firstOrFail();
+    }
+
     private function builder(array $filter): Builder
     {
         $builder = Person::query();

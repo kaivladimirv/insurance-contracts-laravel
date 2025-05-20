@@ -17,6 +17,7 @@ use InvalidArgumentException;
  * @property int $service_id
  * @property LimitType $limit_type
  * @property float $balance
+ * @property int $insured_person_id
  * @property InsuredPerson $insuredPerson
  * @method static Builder byContractAndService(int $contract_id, int $service_id)
  */
