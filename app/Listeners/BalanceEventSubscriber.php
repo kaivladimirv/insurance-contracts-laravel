@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use App\Events\Balance\BalanceWasDecreasedDueToProvidedService;
+use App\Events\Balance\BalanceWasIncreasedDueToProvidedService;
+use App\Models\Person;
 use App\Notifications\Balance\BalanceDecreasedDueToProvidedService;
+use App\Notifications\Balance\BalanceIncreasedDueToProvidedServiceCancellation;
 use App\ReadModels\PersonFetcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\App;
@@ -14,17 +17,31 @@ class BalanceEventSubscriber implements ShouldQueue
 {
     public function handleBalanceWasDecreasedDueToProvidedService(BalanceWasDecreasedDueToProvidedService $event): void
     {
-        /** @var PersonFetcher $personFetcher */
-        $personFetcher = App::make(PersonFetcher::class);
-        $person = $personFetcher->getOneByInsuredPersonId($event->balance->insured_person_id);
+        $person = $this->getPersonByInsuredPersonId($event->balance->insured_person_id);
 
         $person->notify(new BalanceDecreasedDueToProvidedService($event->balance, $event->providedService));
+    }
+
+    public function handleBalanceWasIncreasedDueToProvidedService(BalanceWasIncreasedDueToProvidedService $event): void
+    {
+        $person = $this->getPersonByInsuredPersonId($event->balance->insured_person_id);
+
+        $person->notify(new BalanceIncreasedDueToProvidedServiceCancellation($event->balance, $event->providedService));
+    }
+
+    private function getPersonByInsuredPersonId(int $insuredPersonId): Person
+    {
+        /** @var PersonFetcher $personFetcher */
+        $personFetcher = App::make(PersonFetcher::class);
+
+        return $personFetcher->getOneByInsuredPersonId($insuredPersonId);
     }
 
     public function subscribe(): array
     {
         return [
-            BalanceWasDecreasedDueToProvidedService::class => 'handleBalanceWasDecreasedDueToProvidedService'
+            BalanceWasDecreasedDueToProvidedService::class => 'handleBalanceWasDecreasedDueToProvidedService',
+            BalanceWasIncreasedDueToProvidedService::class => 'handleBalanceWasIncreasedDueToProvidedService'
         ];
     }
 }

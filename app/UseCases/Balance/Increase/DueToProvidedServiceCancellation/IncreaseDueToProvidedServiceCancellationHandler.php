@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\UseCases\Balance\Increase\DueToProvidedServiceCancellation;
 
+use App\Events\Balance\BalanceWasIncreasedDueToProvidedService;
 use App\Models\Balance;
 use App\Models\Builders\BalanceBuilder;
 use App\Models\ProvidedService;
-use App\Notifications\Balance\BalanceIncreasedDueToProvidedServiceCancellation;
 use App\ReadModels\BalanceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
@@ -16,8 +16,10 @@ use Override;
 
 class IncreaseDueToProvidedServiceCancellationHandler implements CommandHandler
 {
-    public function __construct(private readonly BalanceBuilder $balanceBuilder, private readonly BalanceFetcher $balanceFetcher)
-    {
+    public function __construct(
+        private readonly BalanceBuilder $balanceBuilder,
+        private readonly BalanceFetcher $balanceFetcher
+    ) {
     }
 
     #[Override]
@@ -30,7 +32,7 @@ class IncreaseDueToProvidedServiceCancellationHandler implements CommandHandler
         $balance->add($providedService->getValue());
         $balance->save();
 
-        $balance->insuredPerson->person->notify(new BalanceIncreasedDueToProvidedServiceCancellation($balance, $providedService));
+        BalanceWasIncreasedDueToProvidedService::dispatch($balance, $providedService);
     }
 
     private function getBalance(ProvidedService $providedService): ?Balance
