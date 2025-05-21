@@ -2299,16 +2299,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.44.7",
+            "version": "v11.45.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "00bc6ac91a6d577bf051c18ddaa638c0d221e1c7"
+                "reference": "d0730deb427632004d24801be7ca1ed2c10fbc4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/00bc6ac91a6d577bf051c18ddaa638c0d221e1c7",
-                "reference": "00bc6ac91a6d577bf051c18ddaa638c0d221e1c7",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d0730deb427632004d24801be7ca1ed2c10fbc4e",
+                "reference": "d0730deb427632004d24801be7ca1ed2c10fbc4e",
                 "shasum": ""
             },
             "require": {
@@ -2329,7 +2329,7 @@
                 "guzzlehttp/uri-template": "^1.0",
                 "laravel/prompts": "^0.1.18|^0.2.0|^0.3.0",
                 "laravel/serializable-closure": "^1.3|^2.0",
-                "league/commonmark": "^2.6",
+                "league/commonmark": "^2.7",
                 "league/flysystem": "^3.25.1",
                 "league/flysystem-local": "^3.25.1",
                 "league/uri": "^7.5.1",
@@ -2416,7 +2416,7 @@
                 "league/flysystem-read-only": "^3.25.1",
                 "league/flysystem-sftp-v3": "^3.25.1",
                 "mockery/mockery": "^1.6.10",
-                "orchestra/testbench-core": "^9.11.2",
+                "orchestra/testbench-core": "^9.13.2",
                 "pda/pheanstalk": "^5.0.6",
                 "php-http/discovery": "^1.15",
                 "phpstan/phpstan": "^2.0",
@@ -2510,7 +2510,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-04-25T12:40:47+00:00"
+            "time": "2025-05-20T15:15:58+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -13030,12 +13030,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "8506dfcb5657c5d649d6a4b165cc0ba8cde8a597"
+                "reference": "7b3d9454eb5ec64d0195b08eeed7a844c4be25fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/8506dfcb5657c5d649d6a4b165cc0ba8cde8a597",
-                "reference": "8506dfcb5657c5d649d6a4b165cc0ba8cde8a597",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7b3d9454eb5ec64d0195b08eeed7a844c4be25fe",
+                "reference": "7b3d9454eb5ec64d0195b08eeed7a844c4be25fe",
                 "shasum": ""
             },
             "require": {
@@ -13140,7 +13140,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-05-06T08:26:41+00:00"
+            "time": "2025-05-20T13:53:04+00:00"
         }
     ],
     "aliases": [],
