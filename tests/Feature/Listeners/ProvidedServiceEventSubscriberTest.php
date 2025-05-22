@@ -28,7 +28,7 @@ class ProvidedServiceEventSubscriberTest extends TestCase
         $this->companyAuthorizedByToken();
 
         $this->subscriber = App::make(ProvidedServiceEventSubscriber::class);
-        $this->providedService = ProvidedServiceFactory::new()->make(['id' => fake()->randomNumber()]);
+        $this->providedService = ProvidedServiceFactory::new()->for($this->company)->makeOne(['id' => fake()->randomNumber()]);
     }
 
     public function testHandleRegisteredSuccess(): void
@@ -36,7 +36,7 @@ class ProvidedServiceEventSubscriberTest extends TestCase
         $this->mock(DecreaseDueToProvidedServiceHandler::class)
             ->shouldReceive('handle')->once();
 
-        $event = new ProvidedServiceRegistered($this->providedService->id);
+        $event = new ProvidedServiceRegistered($this->providedService->toDto());
         $this->subscriber->handleRegistered($event);
     }
 

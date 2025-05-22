@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Dto\ProvidedServiceDto;
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
 use Database\Factories\ProvidedServiceFactory;
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property int $service_id
  * @property LimitType $limit_type
  * @property int $insured_person_id
+ * @property int $company_id
  * @property int $contract_id
  * @property Contract $contract
  * @property InsuredPerson $insuredPerson
@@ -89,5 +91,20 @@ class ProvidedService extends Model
     public function getValue(): float
     {
         return $this->limit_type->isItQuantityLimiter() ? $this->quantity : $this->amount;
+    }
+
+    public function toDto(): ProvidedServiceDto
+    {
+        return new ProvidedServiceDto(
+            $this->date_of_service,
+            $this->service_id,
+            $this->service_name,
+            $this->quantity,
+            $this->price,
+            $this->amount,
+            $this->contract_id,
+            $this->insured_person_id,
+            $this->getValue(),
+        );
     }
 }

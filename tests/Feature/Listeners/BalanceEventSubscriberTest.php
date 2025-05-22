@@ -34,7 +34,7 @@ class BalanceEventSubscriberTest extends TestCase
 
         $this->person = PersonFactory::new()->for($this->company)->createOne(['notifier_type' => NotifierType::EMAIL]);
         $insuredPerson = InsuredPersonFactory::new()->for($this->person)->createOne();
-        $this->providedService = ProvidedServiceFactory::new()->for($insuredPerson)->makeOne();
+        $this->providedService = ProvidedServiceFactory::new()->for($this->company)->for($insuredPerson)->makeOne(['id' => fake()->randomNumber()]);
         $this->balance = BalanceFactory::new()->for($insuredPerson)->makeOne();
     }
 
@@ -42,7 +42,7 @@ class BalanceEventSubscriberTest extends TestCase
     {
         Notification::fake();
 
-        $event = new BalanceWasDecreasedDueToProvidedService($this->balance, $this->providedService);
+        $event = new BalanceWasDecreasedDueToProvidedService($this->balance->balance, $this->providedService->toDto());
         $this->subscriber->handleBalanceWasDecreasedDueToProvidedService($event);
 
         Notification::assertSentTo($this->person, BalanceDecreasedDueToProvidedService::class);

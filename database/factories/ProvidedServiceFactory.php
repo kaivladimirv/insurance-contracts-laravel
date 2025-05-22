@@ -26,10 +26,13 @@ class ProvidedServiceFactory extends Factory
     {
         return [
             'date_of_service' => fake()->date(),
+            'service_id' => fake()->randomNumber(),
             'service_name' => fake()->unique()->sentence(),
             'limit_type' => fake()->randomElement(LimitType::cases()),
             'quantity' => fake()->numberBetween(1, 20),
             'price' => fake()->randomFloat(0, 1, 20000),
+            'contract_id' => fake()->randomNumber(),
+            'insured_person_id' => fake()->randomNumber(),
         ];
     }
 

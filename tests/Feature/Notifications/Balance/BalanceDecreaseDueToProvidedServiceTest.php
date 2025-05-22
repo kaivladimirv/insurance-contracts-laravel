@@ -29,7 +29,7 @@ class BalanceDecreaseDueToProvidedServiceTest extends TestCase
         $this->providedService = ProvidedServiceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
         $balance = BalanceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
 
-        $this->notification = new BalanceDecreasedDueToProvidedService($balance, $this->providedService);
+        $this->notification = new BalanceDecreasedDueToProvidedService($balance->balance, $this->providedService->toDto());
     }
 
     public function testSuccess(): void

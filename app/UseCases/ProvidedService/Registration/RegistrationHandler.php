@@ -29,7 +29,7 @@ readonly class RegistrationHandler implements CommandHandler
         $this->specification->throwExceptionIfIsNotSatisfiedBy($providedService);
         $providedService->save();
 
-        ProvidedServiceRegistered::dispatch($providedService->id);
+        ProvidedServiceRegistered::dispatch($providedService->toDto());
 
         return $providedService->id;
     }

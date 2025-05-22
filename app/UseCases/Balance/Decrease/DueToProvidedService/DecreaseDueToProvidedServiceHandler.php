@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\UseCases\Balance\Decrease\DueToProvidedService;
 
+use App\Dto\ProvidedServiceDto;
 use App\Events\Balance\BalanceWasDecreasedDueToProvidedService;
 use App\Models\Balance;
 use App\Models\Builders\BalanceBuilder;
-use App\Models\ProvidedService;
 use App\ReadModels\BalanceFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
@@ -23,32 +23,31 @@ class DecreaseDueToProvidedServiceHandler implements CommandHandler
     }
 
     #[Override]
-    public function handle(DecreaseDueToProvidedServiceCommand|Command $command): void
+    public function handle(Command $command): void
     {
-        /** @var ProvidedService $providedService */
-        $providedService = ProvidedService::query()->findOrFail($command->providedServiceId);
+        /** @var DecreaseDueToProvidedServiceCommand $command */
 
-        $balance = $this->getBalance($providedService) ?? $this->buildNewBalance($providedService);
-        $balance->subtract($providedService->getValue());
+        $balance = $this->getBalance($command->providedServiceDto) ?? $this->buildNewBalance($command->providedServiceDto);
+        $balance->subtract($command->providedServiceDto->value);
         $balance->save();
 
-        BalanceWasDecreasedDueToProvidedService::dispatch($balance, $providedService);
+        BalanceWasDecreasedDueToProvidedService::dispatch($balance->balance, $command->providedServiceDto);
     }
 
-    private function getBalance(ProvidedService $providedService): ?Balance
+    private function getBalance(ProvidedServiceDto $providedServiceDto): ?Balance
     {
         return $this->balanceFetcher->findOneByInsuredPersonAndService(
-            $providedService->insured_person_id,
-            $providedService->service_id
+            $providedServiceDto->insuredPersonId,
+            $providedServiceDto->serviceId
         );
     }
 
-    private function buildNewBalance(ProvidedService $providedService): Model|Balance
+    private function buildNewBalance(ProvidedServiceDto $providedServiceDto): Model|Balance
     {
         return $this->balanceBuilder
-            ->withContractId($providedService->contract_id)
-            ->withServiceId($providedService->service_id)
-            ->withInsuredPersonId($providedService->insured_person_id)
+            ->withContractId($providedServiceDto->contractId)
+            ->withServiceId($providedServiceDto->serviceId)
+            ->withInsuredPersonId($providedServiceDto->insuredPersonId)
             ->build();
     }
 }

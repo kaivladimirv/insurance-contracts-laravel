@@ -55,7 +55,7 @@ class DecreaseDueToProvidedServiceTest extends TestCase
         Event::fake();
         BalanceFactory::new()->for($this->insuredPerson)->for($this->contractService)->createOne();
 
-        $command = new DecreaseDueToProvidedServiceCommand($this->providedService->id);
+        $command = new DecreaseDueToProvidedServiceCommand($this->providedService->toDto());
         $this->handler->handle($command);
 
         $expectedBalance = $this->contractService->limit_value - $this->providedService->getValue();
@@ -75,7 +75,7 @@ class DecreaseDueToProvidedServiceTest extends TestCase
     {
         Event::fake();
 
-        $command = new DecreaseDueToProvidedServiceCommand($this->providedService->id);
+        $command = new DecreaseDueToProvidedServiceCommand($this->providedService->toDto());
         $this->handler->handle($command);
 
         $expectedBalance = $this->contractService->limit_value - $this->providedService->getValue();

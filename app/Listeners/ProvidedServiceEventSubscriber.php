@@ -17,7 +17,7 @@ class ProvidedServiceEventSubscriber implements ShouldQueue
 {
     public function handleRegistered(ProvidedServiceRegistered $event): void
     {
-        $command = new DecreaseDueToProvidedServiceCommand($event->providedServiceId);
+        $command = new DecreaseDueToProvidedServiceCommand($event->providedServiceDto);
 
         /** @var DecreaseDueToProvidedServiceHandler $handler */
         $handler = App::make(DecreaseDueToProvidedServiceHandler::class);
