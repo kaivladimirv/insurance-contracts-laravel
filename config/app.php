@@ -171,7 +171,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         \Hedii\ArtisanLogCleaner\ArtisanLogCleanerServiceProvider::class,
 
-        \App\Providers\ProvidedServiceServiceProvider::class
+        \App\Providers\ProvidedServiceServiceProvider::class,
+        \App\Providers\ContractServiceProvider::class
     ])->toArray(),
 
     /*
