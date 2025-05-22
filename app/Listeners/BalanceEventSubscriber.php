@@ -24,9 +24,9 @@ class BalanceEventSubscriber implements ShouldQueue
 
     public function handleBalanceWasIncreasedDueToProvidedService(BalanceWasIncreasedDueToProvidedService $event): void
     {
-        $person = $this->getPersonByInsuredPersonId($event->balance->insured_person_id);
+        $person = $this->getPersonByInsuredPersonId($event->providedServiceDto->insuredPersonId);
 
-        $person->notify(new BalanceIncreasedDueToProvidedServiceCancellation($event->balance, $event->providedService));
+        $person->notify(new BalanceIncreasedDueToProvidedServiceCancellation($event->balance, $event->providedServiceDto));
     }
 
     private function getPersonByInsuredPersonId(int $insuredPersonId): Person

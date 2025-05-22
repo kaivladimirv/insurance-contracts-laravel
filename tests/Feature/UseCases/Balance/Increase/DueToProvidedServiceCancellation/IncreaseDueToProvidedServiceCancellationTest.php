@@ -57,7 +57,7 @@ class IncreaseDueToProvidedServiceCancellationTest extends TestCase
         Notification::fake();
         BalanceFactory::new()->for($this->insuredPerson)->for($this->contractService)->createOne();
 
-        $command = new IncreaseDueToProvidedServiceCancellationCommand($this->providedService->id);
+        $command = new IncreaseDueToProvidedServiceCancellationCommand($this->providedService->toDto());
         App::make(IncreaseDueToProvidedServiceCancellationHandler::class)->handle($command);
 
         $expectedBalance = $this->contractService->limit_value + $this->providedService->getValue();
@@ -78,7 +78,7 @@ class IncreaseDueToProvidedServiceCancellationTest extends TestCase
     {
         Notification::fake();
 
-        $command = new IncreaseDueToProvidedServiceCancellationCommand($this->providedService->id);
+        $command = new IncreaseDueToProvidedServiceCancellationCommand($this->providedService->toDto());
         App::make(IncreaseDueToProvidedServiceCancellationHandler::class)->handle($command);
 
 

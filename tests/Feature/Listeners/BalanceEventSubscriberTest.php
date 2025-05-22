@@ -52,7 +52,7 @@ class BalanceEventSubscriberTest extends TestCase
     {
         Notification::fake();
 
-        $event = new BalanceWasIncreasedDueToProvidedService($this->balance, $this->providedService);
+        $event = new BalanceWasIncreasedDueToProvidedService($this->balance->balance, $this->providedService->toDto());
         $this->subscriber->handleBalanceWasIncreasedDueToProvidedService($event);
 
         Notification::assertSentTo($this->person, BalanceIncreasedDueToProvidedServiceCancellation::class);

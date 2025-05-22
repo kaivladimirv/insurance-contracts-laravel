@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\UseCases\Balance\Increase\DueToProvidedServiceCancellation;
 
+use App\Dto\ProvidedServiceDto;
 use App\UseCases\Command;
 
 readonly class IncreaseDueToProvidedServiceCancellationCommand implements Command
 {
-    public function __construct(public int $providedServiceId)
+    public function __construct(public ProvidedServiceDto $providedServiceDto)
     {
     }
 }

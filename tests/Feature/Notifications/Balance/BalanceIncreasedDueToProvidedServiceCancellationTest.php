@@ -27,7 +27,7 @@ class BalanceIncreasedDueToProvidedServiceCancellationTest extends TestCase
         $providedService = ProvidedServiceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
         $balance = BalanceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
 
-        $this->notification = new BalanceIncreasedDueToProvidedServiceCancellation($balance, $providedService);
+        $this->notification = new BalanceIncreasedDueToProvidedServiceCancellation($balance->balance, $providedService->toDto());
     }
 
     public function testSuccess(): void

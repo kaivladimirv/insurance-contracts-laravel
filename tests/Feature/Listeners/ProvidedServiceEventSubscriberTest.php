@@ -45,7 +45,7 @@ class ProvidedServiceEventSubscriberTest extends TestCase
         $this->mock(IncreaseDueToProvidedServiceCancellationHandler::class)
             ->shouldReceive('handle')->once();
 
-        $event = new RegistrationOfProvidedServiceCanceled($this->providedService->id);
+        $event = new RegistrationOfProvidedServiceCanceled($this->providedService->toDto());
         $this->subscriber->handleCanceled($event);
     }
 }

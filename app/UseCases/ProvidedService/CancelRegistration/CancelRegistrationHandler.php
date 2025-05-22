@@ -26,6 +26,6 @@ readonly class CancelRegistrationHandler implements CommandHandler
 
         $providedService->delete();
 
-        RegistrationOfProvidedServiceCanceled::dispatch($providedService->id);
+        RegistrationOfProvidedServiceCanceled::dispatch($providedService->toDto());
     }
 }

@@ -26,7 +26,7 @@ class ProvidedServiceEventSubscriber implements ShouldQueue
 
     public function handleCanceled(RegistrationOfProvidedServiceCanceled $event): void
     {
-        $command = new IncreaseDueToProvidedServiceCancellationCommand($event->providedServiceId);
+        $command = new IncreaseDueToProvidedServiceCancellationCommand($event->providedServiceDto);
 
         /** @var IncreaseDueToProvidedServiceCancellationHandler $handler */
         $handler = App::make(IncreaseDueToProvidedServiceCancellationHandler::class);
