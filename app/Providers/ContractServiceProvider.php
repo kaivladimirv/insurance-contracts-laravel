@@ -25,7 +25,7 @@ class ContractServiceProvider extends ServiceProvider implements DeferrableProvi
     public function provides(): array
     {
         return [
-            ContractHasNoProvidedServicesSpecification::class
+            DeleteHandler::class
         ];
     }
 }
