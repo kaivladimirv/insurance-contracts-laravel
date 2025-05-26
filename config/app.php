@@ -175,7 +175,8 @@ return [
         \App\Providers\ContractServiceProvider::class,
         \App\Providers\InsuredPersonServiceProvider::class,
         \App\Providers\PersonServiceProvider::class,
-        \App\Providers\ServiceServiceProvider::class
+        \App\Providers\ServiceServiceProvider::class,
+        \App\Providers\ContractServiceServiceProvider::class
     ])->toArray(),
 
     /*
