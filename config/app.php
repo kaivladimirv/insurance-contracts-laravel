@@ -172,7 +172,8 @@ return [
         \Hedii\ArtisanLogCleaner\ArtisanLogCleanerServiceProvider::class,
 
         \App\Providers\ProvidedServiceServiceProvider::class,
-        \App\Providers\ContractServiceProvider::class
+        \App\Providers\ContractServiceProvider::class,
+        \App\Providers\InsuredPersonServiceProvider::class
     ])->toArray(),
 
     /*
