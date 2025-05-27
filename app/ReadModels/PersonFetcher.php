@@ -7,7 +7,6 @@ namespace App\ReadModels;
 use App\Models\Person;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class PersonFetcher
 {
@@ -18,7 +17,7 @@ class PersonFetcher
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $companyId, int $personId): Model|Builder|Person
+    public function getOne(int $companyId, int $personId): Person
     {
         return Person::query()
             ->where('company_id', '=', $companyId)
@@ -26,21 +25,21 @@ class PersonFetcher
             ->firstOrFail();
     }
 
-    public function getOneByInviteToken(string $token): Model|Builder|Person
+    public function getOneByInviteToken(string $token): Person
     {
         return Person::query()
             ->where('telegram_chat_invite_token', '=', $token)
             ->firstOrFail();
     }
 
-    public function getOneByTelegramChaId(string $chatId): Model|Builder|Person
+    public function getOneByTelegramChaId(string $chatId): Person
     {
         return Person::query()
             ->where('telegram_chat_id', '=', $chatId)
             ->firstOrFail();
     }
 
-    public function getOneByInsuredPersonId(int $insuredPersonId): Model|Builder|Person
+    public function getOneByInsuredPersonId(int $insuredPersonId): Person
     {
         return Person::query()
             ->select('persons.*')
@@ -53,16 +52,10 @@ class PersonFetcher
     {
         $builder = Person::query();
 
-        if (isset($filter['last_name'])) {
-            $builder->where('last_name', 'LIKE', $filter['last_name'] . '%');
-        }
-
-        if (isset($filter['first_name'])) {
-            $builder->where('first_name', 'LIKE', $filter['first_name'] . '%');
-        }
-
-        if (isset($filter['middle_name'])) {
-            $builder->where('middle_name', 'LIKE', $filter['middle_name'] . '%');
+        foreach (['last_name', 'first_name', 'middle_name'] as $field) {
+            if (isset($filter[$field])) {
+                $builder->where($field, 'like', $filter[$field] . '%');
+            }
         }
 
         if (isset($filter['email'])) {
