@@ -5,50 +5,55 @@ declare(strict_types=1);
 namespace App\ReadModels;
 
 use App\Models\Person;
+use App\Models\Scopes\CompanyScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class PersonFetcher
 {
-    public function get(int $companyId, int $limit, int $page, array $filter): LengthAwarePaginator
+    public function get(int $limit, int $page, array $filter): LengthAwarePaginator
     {
         return $this->builder($filter)
-            ->where('company_id', '=', $companyId)
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->orderBy('middle_name')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $companyId, int $personId): Person
+    public function getOne(int $personId): Person
     {
-        return Person::query()
-            ->where('company_id', '=', $companyId)
+        return $this->builder()
             ->where('id', '=', $personId)
             ->firstOrFail();
     }
 
     public function getOneByInviteToken(string $token): Person
     {
-        return Person::query()
+        return $this->builder()
+            ->withoutGlobalScope(CompanyScope::class)
             ->where('telegram_chat_invite_token', '=', $token)
             ->firstOrFail();
     }
 
     public function getOneByTelegramChaId(string $chatId): Person
     {
-        return Person::query()
+        return $this->builder()
+            ->withoutGlobalScope(CompanyScope::class)
             ->where('telegram_chat_id', '=', $chatId)
             ->firstOrFail();
     }
 
     public function getOneByInsuredPersonId(int $insuredPersonId): Person
     {
-        return Person::query()
+        return $this->builder()
+            ->withoutGlobalScope(CompanyScope::class)
             ->select('persons.*')
             ->join('insured_persons', 'insured_persons.person_id', '=', 'persons.id')
             ->where('insured_persons.id', '=', $insuredPersonId)
             ->firstOrFail();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = Person::query();
 
@@ -74,9 +79,6 @@ class PersonFetcher
             }
         }
 
-        return $builder
-            ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->orderBy('middle_name');
+        return $builder;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Balance\Increase\DueToProvidedServiceCancellation;
 
+use App\Services\CurrentCompanyService;
 use Override;
 use App\Enums\NotifierType;
 use App\Models\Balance;
@@ -36,6 +37,8 @@ class IncreaseDueToProvidedServiceCancellationTest extends TestCase
         parent::setUp();
 
         $this->companyAuthorizedByToken();
+
+        App::make(CurrentCompanyService::class)->setCompanyId($this->company->id);
 
         $contract = Contract::factory()->for($this->company)->createOne();
         $this->contractService = ContractServiceFactory::new()->for($contract)

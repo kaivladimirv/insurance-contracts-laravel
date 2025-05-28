@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\UseCases\Person;
 
+use App\Services\CurrentCompanyService;
 use Override;
 use App\Enums\NotifierType;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotCommand;
@@ -24,6 +25,8 @@ class SendInviteToJoinChatBotTest extends TestCase
         parent::setUp();
 
         $this->companyAuthorizedByToken();
+        $currentCompanyService = App::make(CurrentCompanyService::class);
+        $currentCompanyService->setCompanyId($this->company->id);
 
         $this->personFactory = PersonFactory::new()->for($this->company);
         $this->handler = App::make(SendInviteToJoinChatBotHandler::class);

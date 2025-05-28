@@ -33,7 +33,7 @@ class PersonShowTest extends TestCase
 
     public function testNotFoundFail(): void
     {
-        $nonExistentPersonId = fake()->numberBetween(100);
+        $nonExistentPersonId = -1;
 
         $this->getJson(route(self::ROUTE_NAME, $nonExistentPersonId))
             ->assertNotFound();

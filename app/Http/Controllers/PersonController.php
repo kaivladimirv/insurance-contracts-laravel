@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InUse;
-use App\Facades\Auth;
 use App\Http\Requests\Person\IndexPersonRequest;
 use App\Http\Resources\PersonResource;
-use App\Models\Person;
 use App\ReadModels\PersonFetcher;
 use App\Swagger\Responses\CollectionResponse;
 use App\Swagger\Responses\InvalidTokenResponse;
@@ -70,7 +67,6 @@ class PersonController extends Controller
     public function index(IndexPersonRequest $request, PersonFetcher $fetcher): AnonymousResourceCollection
     {
         $persons = $fetcher->get(
-            Auth::company()->id,
             self::LIMIT,
             (int)$request->validated('page'),
             $request->validated()
@@ -134,8 +130,10 @@ class PersonController extends Controller
         response: 404,
         description: 'Person not found'
     )]
-    public function show(Person $person): PersonResource
+    public function show(int $personId, PersonFetcher $fetcher): PersonResource
     {
+        $person = $fetcher->getOne($personId);
+
         return new PersonResource($person);
     }
 
@@ -203,9 +201,6 @@ class PersonController extends Controller
         response: 409,
         description: 'The person is the insured person'
     )]
-    /**
-     * @throws InUse
-     */
     public function destroy(DeleteCommand $command, DeleteHandler $handler): Response
     {
         $handler->handle($command);

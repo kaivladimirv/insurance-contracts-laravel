@@ -21,6 +21,7 @@ readonly class AddHandler implements CommandHandler
         $person->save();
 
         PersonAdded::dispatch(
+            $person->company_id,
             $person->id,
             $person->notifier_type
         );

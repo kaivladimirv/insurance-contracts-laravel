@@ -45,7 +45,7 @@ class PersonDestroyTest extends TestCase
 
     public function testNotFoundFail(): void
     {
-        $nonExistentPersonId = fake()->numberBetween(100);
+        $nonExistentPersonId = -1;
 
         $this->deleteJson(route(self::ROUTE_NAME, $nonExistentPersonId))
             ->assertNotFound();

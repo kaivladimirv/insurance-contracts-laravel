@@ -15,6 +15,7 @@ class PersonUpdated implements ShouldDispatchAfterCommit
     use SerializesModels;
 
     public function __construct(
+        readonly public int $companyId,
         readonly public int $personId,
         readonly public ?NotifierType $notifierType,
         readonly public bool $hasNotifierTypeChanged,

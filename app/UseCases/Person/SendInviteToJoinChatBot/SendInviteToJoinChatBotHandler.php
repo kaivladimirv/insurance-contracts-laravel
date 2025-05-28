@@ -7,6 +7,7 @@ namespace App\UseCases\Person\SendInviteToJoinChatBot;
 use App\Enums\NotifierType;
 use App\Models\Person;
 use App\Notifications\Person\InvitationToJoinChatBot;
+use App\ReadModels\PersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use DomainException;
@@ -15,11 +16,17 @@ use Override;
 
 readonly class SendInviteToJoinChatBotHandler implements CommandHandler
 {
+    /**
+     * @psalm-api
+     */
+    public function __construct(private PersonFetcher $fetcher)
+    {
+    }
+
     #[Override]
     public function handle(SendInviteToJoinChatBotCommand|Command $command): void
     {
-        /** @var Person $person */
-        $person = Person::query()->findOrFail($command->person_id);
+        $person = $this->fetcher->getOne($command->person_id);
 
         $this->assertInviteNotSent($person);
         $this->assertNotifierTypeIsTelegram($person);

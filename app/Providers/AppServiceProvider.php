@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\CurrentCompanyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+
+        $this->app->singleton(CurrentCompanyService::class, fn () => new CurrentCompanyService());
     }
 
     /**

@@ -5,18 +5,25 @@ declare(strict_types=1);
 namespace App\UseCases\Person\Update;
 
 use App\Events\Person\PersonUpdated;
-use App\Models\Person;
+use App\ReadModels\PersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
 use Override;
 
 readonly class UpdateHandler implements CommandHandler
 {
+    /**
+     * @psalm-api
+     */
+    public function __construct(private PersonFetcher $fetcher)
+    {
+    }
+
     #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
-        /** @var Person $person */
-        $person = Person::query()->findOrFail($command->id);
+        $person = $this->fetcher->getOne($command->id);
+
         $person->fill($command->only(...$person->getFillable())->toArray());
 
         if ($person->isDirty('phone_number')) {
@@ -27,6 +34,7 @@ readonly class UpdateHandler implements CommandHandler
         $person->save();
 
         PersonUpdated::dispatch(
+            $person->company_id,
             $person->id,
             $person->notifier_type,
             $person->wasChanged('notifier_type'),

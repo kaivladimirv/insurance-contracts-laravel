@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SetCurrentCompany;
 use App\Http\Middleware\TrustProxies;
 use Illuminate\Http\Middleware\HandleCors;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -70,7 +71,8 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class . ':api',
             SubstituteBindings::class,
-            AddCompanyIdToRequest::class
+            AddCompanyIdToRequest::class,
+            SetCurrentCompany::class
         ],
     ];
 
@@ -114,7 +116,8 @@ class Kernel extends HttpKernel
         SubstituteBindings::class,
         Authorize::class,
         AuthenticateWithBasicAuth::class,
-        AddCompanyIdToRequest::class
+        AddCompanyIdToRequest::class,
+        SetCurrentCompany::class
     ];
 
     #[Override]

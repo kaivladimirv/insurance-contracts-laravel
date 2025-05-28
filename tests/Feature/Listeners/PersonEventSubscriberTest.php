@@ -41,6 +41,7 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->save();
 
         $event = new PersonUpdated(
+            $this->person->company_id,
             $this->person->id,
             $this->person->notifier_type,
             hasNotifierTypeChanged: false,
@@ -65,6 +66,7 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->save();
 
         $event = new PersonUpdated(
+            $this->person->company_id,
             $this->person->id,
             $this->person->notifier_type,
             hasNotifierTypeChanged: true,
@@ -89,6 +91,7 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->save();
 
         $event = new PersonUpdated(
+            $this->person->company_id,
             $this->person->id,
             $this->person->notifier_type,
             hasNotifierTypeChanged: true,
@@ -108,6 +111,7 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->save();
 
         $event = new PersonUpdated(
+            $this->person->company_id,
             $this->person->id,
             $this->person->notifier_type,
             hasNotifierTypeChanged: false,
@@ -130,6 +134,7 @@ class PersonEventSubscriberTest extends TestCase
             ->with(__('The invitation has already been sent'), ['person_id' => $this->person->id]);
 
         $event = new PersonAdded(
+            $this->person->company_id,
             $this->person->id,
             $this->person->notifier_type
         );

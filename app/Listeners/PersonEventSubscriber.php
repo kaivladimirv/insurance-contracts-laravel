@@ -7,6 +7,7 @@ namespace App\Listeners;
 use App\Enums\NotifierType;
 use App\Events\Person\PersonAdded;
 use App\Events\Person\PersonUpdated;
+use App\Services\CurrentCompanyService;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotCommand;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotHandler;
 use DomainException;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 readonly class PersonEventSubscriber
 {
     public function __construct(
+        private CurrentCompanyService $currentCompanyService,
         private SendInviteToJoinChatBotHandler $createInvitationToJoinChatBotHandler
     ) {
     }
@@ -25,7 +27,7 @@ readonly class PersonEventSubscriber
     public function handlePersonAdded(PersonAdded $event): void
     {
         if ($event->notifierType === NotifierType::TELEGRAM) {
-            $this->sendInvitationToJoinChatBot($event->personId);
+            $this->sendInvitationToJoinChatBot($event->companyId, $event->personId);
         }
     }
 
@@ -38,13 +40,15 @@ readonly class PersonEventSubscriber
             ($event->hasNotifierTypeChanged or $event->hasPhoneNumberChanged)
             and ($event->notifierType === NotifierType::TELEGRAM)
         ) {
-            $this->sendInvitationToJoinChatBot($event->personId);
+            $this->sendInvitationToJoinChatBot($event->companyId, $event->personId);
         }
     }
 
-    private function sendInvitationToJoinChatBot(int $personId): void
+    private function sendInvitationToJoinChatBot(int $companyId, int $personId): void
     {
         try {
+            $this->currentCompanyService->setCompanyId($companyId);
+
             $command = new SendInviteToJoinChatBotCommand($personId);
             $this->createInvitationToJoinChatBotHandler->handle($command);
         } catch (DomainException $e) {
