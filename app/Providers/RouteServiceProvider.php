@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Override;
-use App\Models\InsuredPerson;
-use App\ReadModels\InsuredPersonFetcher;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -36,14 +34,6 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
-        });
-
-        Route::bind('insuredPerson', function (int $insuredPersonId, $route) {
-            if ($route->hasParameter('contract_id')) {
-                return app(InsuredPersonFetcher::class)->getOne((int)$route->parameter('contract_id'), $insuredPersonId);
-            } else {
-                return InsuredPerson::query()->findOrFail($insuredPersonId);
-            }
         });
     }
 }

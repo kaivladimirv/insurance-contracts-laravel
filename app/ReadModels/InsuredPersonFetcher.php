@@ -7,7 +7,6 @@ namespace App\ReadModels;
 use App\Models\InsuredPerson;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class InsuredPersonFetcher
@@ -16,25 +15,26 @@ class InsuredPersonFetcher
     {
         return $this->builder($filter)
             ->where('contract_id', '=', $contractId)
+            ->orderBy('policy_number')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
     public function getAllIdsByContract(int $contractId): Collection
     {
-        return InsuredPerson::query()
+        return $this->builder()
             ->where('contract_id', $contractId)
             ->pluck('id');
     }
 
-    public function getOne(int $contractId, int $insuredPersonId): Model|Builder|InsuredPerson
+    public function getOne(int $contractId, int $insuredPersonId): InsuredPerson
     {
-        return InsuredPerson::query()
+        return $this->builder()
             ->where('contract_id', '=', $contractId)
             ->where('id', '=', $insuredPersonId)
             ->firstOrFail();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = InsuredPerson::query();
 
@@ -46,7 +46,6 @@ class InsuredPersonFetcher
             $builder->where('is_allowed_to_exceed_limit', '=', $filter['is_allowed_to_exceed_limit']);
         }
 
-        return $builder
-            ->orderBy('policy_number');
+        return $builder;
     }
 }

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InUse;
 use App\Http\Requests\InsuredPerson\IndexInsuredPersonRequest;
 use App\Http\Resources\BalanceResource;
 use App\Http\Resources\InsuredPersonResource;
-use App\Models\InsuredPerson;
 use App\ReadModels\BalanceFetcher;
 use App\ReadModels\InsuredPersonFetcher;
 use App\Swagger\Responses\CollectionResponse;
@@ -148,8 +146,10 @@ class InsuredPersonController extends Controller
         response: 404,
         description: 'Contract or insured person not found'
     )]
-    public function show(int $_contractId, InsuredPerson $insuredPerson): InsuredPersonResource
+    public function show(int $contractId, int $insuredPersonId, InsuredPersonFetcher $fetcher): InsuredPersonResource
     {
+        $insuredPerson = $fetcher->getOne($contractId, $insuredPersonId);
+
         return new InsuredPersonResource($insuredPerson);
     }
 
@@ -219,9 +219,6 @@ class InsuredPersonController extends Controller
         response: 409,
         description: 'Services have already been provided to the insured person'
     )]
-    /**
-     * @throws InUse
-     */
     public function destroy(DeleteCommand $command, DeleteHandler $handler): Response
     {
         $handler->handle($command);
@@ -252,9 +249,11 @@ class InsuredPersonController extends Controller
         response: 404,
         description: 'Contract or insured person not found'
     )]
-    public function showBalance(int $_contractId, InsuredPerson $insuredPerson, BalanceFetcher $fetcher): AnonymousResourceCollection
+    public function showBalance(int $contractId, int $insuredPersonId, InsuredPersonFetcher $insuredPersonFetcher, BalanceFetcher $balanceFetcher): AnonymousResourceCollection
     {
-        $balances = $fetcher->getByInsuredPerson($insuredPerson->id);
+        $insuredPerson = $insuredPersonFetcher->getOne($contractId, $insuredPersonId);
+
+        $balances = $balanceFetcher->getByInsuredPerson($insuredPerson->id);
 
         return BalanceResource::collection($balances);
     }
