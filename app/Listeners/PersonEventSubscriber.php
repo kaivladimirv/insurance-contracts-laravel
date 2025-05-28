@@ -7,7 +7,6 @@ namespace App\Listeners;
 use App\Enums\NotifierType;
 use App\Events\Person\PersonAdded;
 use App\Events\Person\PersonUpdated;
-use App\Models\Person;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotCommand;
 use App\UseCases\Person\SendInviteToJoinChatBot\SendInviteToJoinChatBotHandler;
 use DomainException;
@@ -25,11 +24,8 @@ readonly class PersonEventSubscriber
      */
     public function handlePersonAdded(PersonAdded $event): void
     {
-        /** @var Person $person */
-        $person = Person::query()->findOrFail($event->personId);
-
-        if ($person->notifier_type === NotifierType::TELEGRAM) {
-            $this->sendInvitationToJoinChatBot($person);
+        if ($event->notifierType === NotifierType::TELEGRAM) {
+            $this->sendInvitationToJoinChatBot($event->personId);
         }
     }
 
@@ -38,24 +34,21 @@ readonly class PersonEventSubscriber
      */
     public function handlePersonUpdated(PersonUpdated $event): void
     {
-        /** @var Person $person */
-        $person = Person::query()->findOrFail($event->personId);
-
         if (
             ($event->hasNotifierTypeChanged or $event->hasPhoneNumberChanged)
-            and ($person->notifier_type === NotifierType::TELEGRAM)
+            and ($event->notifierType === NotifierType::TELEGRAM)
         ) {
-            $this->sendInvitationToJoinChatBot($person);
+            $this->sendInvitationToJoinChatBot($event->personId);
         }
     }
 
-    private function sendInvitationToJoinChatBot(Person $person): void
+    private function sendInvitationToJoinChatBot(int $personId): void
     {
         try {
-            $command = new SendInviteToJoinChatBotCommand($person->id);
+            $command = new SendInviteToJoinChatBotCommand($personId);
             $this->createInvitationToJoinChatBotHandler->handle($command);
         } catch (DomainException $e) {
-            Log::error($e->getMessage(), ['person_id' => $person->id]);
+            Log::error($e->getMessage(), ['person_id' => $personId]);
         }
     }
 

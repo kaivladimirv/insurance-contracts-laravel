@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property ?string $email
  * @property ?string $phone_number
  * @property ?NotifierType $notifier_type
+ * @property int $company_id
  * @property ?string $telegram_chat_invite_token
  * @property ?Carbon $telegram_invite_date_for_chat
  * @property ?TelegramChatStatus $telegram_chat_status

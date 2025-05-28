@@ -40,7 +40,12 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->notifier_type = NotifierType::TELEGRAM;
         $this->person->save();
 
-        $event = new PersonUpdated($this->person->id, hasNotifierTypeChanged: false, hasPhoneNumberChanged: true);
+        $event = new PersonUpdated(
+            $this->person->id,
+            $this->person->notifier_type,
+            hasNotifierTypeChanged: false,
+            hasPhoneNumberChanged: true
+        );
         $this->subscriber->handlePersonUpdated($event);
         $this->person->refresh();
 
@@ -59,7 +64,12 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->notifier_type = NotifierType::TELEGRAM;
         $this->person->save();
 
-        $event = new PersonUpdated($this->person->id, hasNotifierTypeChanged: true, hasPhoneNumberChanged: false);
+        $event = new PersonUpdated(
+            $this->person->id,
+            $this->person->notifier_type,
+            hasNotifierTypeChanged: true,
+            hasPhoneNumberChanged: false
+        );
         $this->subscriber->handlePersonUpdated($event);
         $this->person->refresh();
 
@@ -78,7 +88,12 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->notifier_type = NotifierType::EMAIL;
         $this->person->save();
 
-        $event = new PersonUpdated($this->person->id, hasNotifierTypeChanged: true, hasPhoneNumberChanged: false);
+        $event = new PersonUpdated(
+            $this->person->id,
+            $this->person->notifier_type,
+            hasNotifierTypeChanged: true,
+            hasPhoneNumberChanged: false
+        );
         $this->subscriber->handlePersonUpdated($event);
         $this->person->refresh();
 
@@ -92,7 +107,12 @@ class PersonEventSubscriberTest extends TestCase
         $this->person->notifier_type = NotifierType::TELEGRAM;
         $this->person->save();
 
-        $event = new PersonUpdated($this->person->id, hasNotifierTypeChanged: false, hasPhoneNumberChanged: false);
+        $event = new PersonUpdated(
+            $this->person->id,
+            $this->person->notifier_type,
+            hasNotifierTypeChanged: false,
+            hasPhoneNumberChanged: false
+        );
         $this->subscriber->handlePersonUpdated($event);
         $this->person->refresh();
 
@@ -109,7 +129,10 @@ class PersonEventSubscriberTest extends TestCase
         Log::shouldReceive('error')->once()
             ->with(__('The invitation has already been sent'), ['person_id' => $this->person->id]);
 
-        $event = new PersonAdded($this->person->id);
+        $event = new PersonAdded(
+            $this->person->id,
+            $this->person->notifier_type
+        );
         $this->subscriber->handlePersonAdded($event);
     }
 }

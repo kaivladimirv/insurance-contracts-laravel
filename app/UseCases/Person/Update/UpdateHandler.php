@@ -28,6 +28,7 @@ readonly class UpdateHandler implements CommandHandler
 
         PersonUpdated::dispatch(
             $person->id,
+            $person->notifier_type,
             $person->wasChanged('notifier_type'),
             $person->wasChanged('phone_number')
         );
