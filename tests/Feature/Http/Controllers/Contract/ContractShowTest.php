@@ -32,7 +32,7 @@ class ContractShowTest extends TestCase
 
     public function testNotFoundFail(): void
     {
-        $nonExistentContractId = fake()->numberBetween(100);
+        $nonExistentContractId = -1;
 
         $this->getJson(route(self::ROUTE_NAME, $nonExistentContractId))
             ->assertNotFound();

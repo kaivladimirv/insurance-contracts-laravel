@@ -22,7 +22,7 @@ readonly class DeleteHandler implements CommandHandler
     #[Override]
     public function handle(DeleteCommand|Command $command): void
     {
-        $contract = $this->fetcher->getOne($command->company_id, $command->id);
+        $contract = $this->fetcher->getOne($command->id);
 
         $this->specification->throwExceptionIfIsNotSatisfiedBy($contract);
 

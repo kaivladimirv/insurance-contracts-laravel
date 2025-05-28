@@ -21,7 +21,7 @@ readonly class UpdateHandler implements CommandHandler
     #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
-        $contract = $this->fetcher->getOne($command->company_id, $command->id);
+        $contract = $this->fetcher->getOne($command->id);
         $contract->fill($command->only(...$contract->getFillable())->toArray());
         $contract->save();
     }

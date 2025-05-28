@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InUse;
-use App\Facades\Auth;
 use App\Http\Requests\Contract\IndexContractRequest;
 use App\Http\Requests\Contract\ShowProvidedServicesRequest;
 use App\Http\Resources\ContractResource;
@@ -72,7 +70,6 @@ class ContractController extends Controller
     public function index(IndexContractRequest $request, ContractFetcher $fetcher): AnonymousResourceCollection
     {
         $contracts = $fetcher->get(
-            Auth::company()->id,
             self::LIMIT,
             (int)$request->validated('page'),
             $request->validated()
@@ -137,8 +134,10 @@ class ContractController extends Controller
         response: 404,
         description: 'Contract not found'
     )]
-    public function show(Contract $contract): ContractResource
+    public function show(int $contractId, ContractFetcher $fetcher): ContractResource
     {
+        $contract = $fetcher->getOne($contractId);
+
         return new ContractResource($contract);
     }
 
@@ -206,9 +205,6 @@ class ContractController extends Controller
         response: 409,
         description: 'Services were provided under the contract'
     )]
-    /**
-     * @throws InUse
-     */
     public function destroy(DeleteCommand $command, DeleteHandler $handler): Response
     {
         $handler->handle($command);

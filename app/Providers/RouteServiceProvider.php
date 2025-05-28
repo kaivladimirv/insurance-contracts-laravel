@@ -3,14 +3,10 @@
 namespace App\Providers;
 
 use Override;
-use App\Facades\Auth;
 use App\Models\InsuredPerson;
-use App\ReadModels\ContractFetcher;
 use App\ReadModels\ContractServiceFetcher;
 use App\ReadModels\InsuredPersonFetcher;
-use App\ReadModels\PersonFetcher;
 use App\ReadModels\ProvidedServiceFetcher;
-use App\ReadModels\ServiceFetcher;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -42,7 +38,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
         });
 
-        Route::bind('contract', fn($contractId) => app(ContractFetcher::class)->getOne(Auth::company()->id, $contractId));
         Route::bind(
             'contractService',
             fn($serviceId, $route) => app(ContractServiceFetcher::class)->getOne($route->parameter('contract_id'), $serviceId)

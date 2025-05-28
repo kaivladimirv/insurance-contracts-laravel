@@ -7,26 +7,25 @@ namespace App\ReadModels;
 use App\Models\Contract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class ContractFetcher
 {
-    public function get(int $companyId, int $limit, int $page, array $filter): LengthAwarePaginator
+    public function get(int $limit, int $page, array $filter): LengthAwarePaginator
     {
         return $this->builder($filter)
-            ->where('company_id', '=', $companyId)
+            ->orderBy('start_date')
+            ->orderBy('number')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $companyId, int $contractId): Model|Builder|Contract
+    public function getOne(int $contractId): Contract
     {
-        return Contract::query()
-            ->where('company_id', '=', $companyId)
+        return $this->builder()
             ->where('id', '=', $contractId)
             ->firstOrFail();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = Contract::query();
 
@@ -54,8 +53,6 @@ class ContractFetcher
             $builder->where('max_amount', '<=', $filter['max_amount_to']);
         }
 
-        return $builder
-            ->orderBy('start_date')
-            ->orderBy('number');
+        return $builder;
     }
 }
