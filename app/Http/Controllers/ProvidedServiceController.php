@@ -165,8 +165,10 @@ class ProvidedServiceController extends Controller
         response: 404,
         description: 'Insured person or provided service not found'
     )]
-    public function show(int $_insuredPersonId, ProvidedService $providedService): ProvidedServiceResource
+    public function show(int $insuredPersonId, int $providedServiceId, ProvidedServiceFetcher $fetcher): ProvidedServiceResource
     {
+        $providedService = $fetcher->getOne($insuredPersonId, $providedServiceId);
+
         return new ProvidedServiceResource($providedService);
     }
 

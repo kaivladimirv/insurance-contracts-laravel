@@ -7,7 +7,6 @@ namespace App\ReadModels;
 use App\Models\ProvidedService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class ProvidedServiceFetcher
@@ -20,6 +19,7 @@ class ProvidedServiceFetcher
     ): LengthAwarePaginator {
         return $this->builder($filter)
             ->where('insured_person_id', '=', $insuredPersonId)
+            ->orderBy('date_of_service')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
@@ -30,9 +30,9 @@ class ProvidedServiceFetcher
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $insuredPersonId, int $providedServiceId): Model|Builder|ProvidedService
+    public function getOne(int $insuredPersonId, int $providedServiceId): ProvidedService
     {
-        return ProvidedService::query()
+        return $this->builder()
             ->where('insured_person_id', '=', $insuredPersonId)
             ->where('id', '=', $providedServiceId)
             ->firstOrFail();
@@ -40,7 +40,7 @@ class ProvidedServiceFetcher
 
     public function getExpenseByService(int $insuredPersonId, int $serviceId): object
     {
-        return ProvidedService::query()
+        return $this->builder()
             ->select(DB::raw('COALESCE(sum(quantity), 0) AS quantity, COALESCE(sum(amount), 0) AS amount'))
             ->where('insured_person_id', $insuredPersonId)
             ->where('service_id', $serviceId)
@@ -49,21 +49,21 @@ class ProvidedServiceFetcher
 
     public function getAmountByInsuredPersonId(int $insuredPersonId): float
     {
-        return (float)ProvidedService::query()
+        return (float)$this->builder()
             ->where('insured_person_id', $insuredPersonId)
             ->sum('amount');
     }
 
     public function isServiceProvidedInContract(int $contractId, int $serviceId): bool
     {
-        return ProvidedService::query()
+        return $this->builder()
             ->select('id')
             ->where('contract_id', '=', $contractId)
             ->where('service_id', '=', $serviceId)
             ->exists();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = ProvidedService::query();
 
@@ -107,7 +107,6 @@ class ProvidedServiceFetcher
             $builder->where('amount', '<=', $filter['amount_to']);
         }
 
-        return $builder
-            ->orderBy('date_of_service');
+        return $builder;
     }
 }
