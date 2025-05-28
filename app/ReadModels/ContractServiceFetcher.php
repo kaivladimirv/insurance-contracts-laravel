@@ -7,7 +7,6 @@ namespace App\ReadModels;
 use App\Models\ContractService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class ContractServiceFetcher
 {
@@ -15,12 +14,13 @@ class ContractServiceFetcher
     {
         return $this->builder($filter)
             ->where('contract_id', '=', $contractId)
+            ->orderBy('service_id')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $contractId, int $serviceId): Model|Builder|ContractService
+    public function getOne(int $contractId, int $serviceId): ContractService
     {
-        return ContractService::query()
+        return $this->builder()
             ->where('contract_id', '=', $contractId)
             ->where('service_id', '=', $serviceId)
             ->firstOrFail();
@@ -28,14 +28,14 @@ class ContractServiceFetcher
 
     public function isExist(int $contractId, int $serviceId): bool
     {
-        return ContractService::query()
+        return $this->builder()
             ->select('id')
             ->where('contract_id', '=', $contractId)
             ->where('service_id', '=', $serviceId)
             ->exists();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = ContractService::query();
 
@@ -50,7 +50,6 @@ class ContractServiceFetcher
             $builder->where('limit_value', '<=', $filter['limit_value_to']);
         }
 
-        return $builder
-            ->orderBy('service_id');
+        return $builder;
     }
 }

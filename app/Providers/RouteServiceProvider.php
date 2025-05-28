@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Override;
 use App\Models\InsuredPerson;
-use App\ReadModels\ContractServiceFetcher;
 use App\ReadModels\InsuredPersonFetcher;
 use App\ReadModels\ProvidedServiceFetcher;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -38,14 +39,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
         });
 
-        Route::bind(
-            'contractService',
-            fn($serviceId, $route) => app(ContractServiceFetcher::class)->getOne($route->parameter('contract_id'), $serviceId)
-        );
-
-        Route::bind('insuredPerson', function ($insuredPersonId, $route) {
+        Route::bind('insuredPerson', function (int $insuredPersonId, $route) {
             if ($route->hasParameter('contract_id')) {
-                return app(InsuredPersonFetcher::class)->getOne($route->parameter('contract_id'), $insuredPersonId);
+                return app(InsuredPersonFetcher::class)->getOne((int) $route->parameter('contract_id'), $insuredPersonId);
             } else {
                 return InsuredPerson::query()->findOrFail($insuredPersonId);
             }
@@ -53,8 +49,8 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind(
             'providedService',
-            fn($providedServiceId, $route) =>
-                app(ProvidedServiceFetcher::class)->getOne($route->parameter('insured_person_id'), $providedServiceId)
+            fn(int $providedServiceId, $route) =>
+                app(ProvidedServiceFetcher::class)->getOne((int) $route->parameter('insured_person_id'), $providedServiceId)
         );
     }
 }

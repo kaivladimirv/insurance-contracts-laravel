@@ -145,8 +145,10 @@ class ContractServiceController extends Controller
         response: 404,
         description: 'Contract or service not found'
     )]
-    public function show(int $_contractId, ContractService $contractService): ContractServiceResource
+    public function show(int $contractId, int $serviceId, ContractServiceFetcher $fetcher): ContractServiceResource
     {
+        $contractService = $fetcher->getOne($contractId, $serviceId);
+
         return new ContractServiceResource($contractService);
     }
 
@@ -183,9 +185,6 @@ class ContractServiceController extends Controller
         description: 'Validation error',
         content: new JsonContent(ref: LimitValidationErrorResponse::class)
     )]
-    /**
-     * @throws InUse
-     */
     public function update(UpdateCommand $command, UpdateHandler $handler): Response
     {
         $handler->handle($command);
