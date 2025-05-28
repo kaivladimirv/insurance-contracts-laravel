@@ -86,6 +86,9 @@ clear-all-cache:
 	vendor/bin/sail artisan route:clear
 	vendor/bin/sail artisan config:clear
 	vendor/bin/sail artisan view:clear
+	vendor/bin/sail artisan clear-compiled
+	vendor/bin/sail artisan optimize:clear
+
 
 mutation-coverage-report-html:
 	vendor/bin/sail exec laravel.test ./vendor/bin/infection --logger-html='storage/coverage/mutation-report.html'
