@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Scopes\CompanyScope;
 use App\Models\Traits\SerializeDate;
 use Database\Factories\ServiceFactory;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property Company $company
  */
+#[ScopedBy(CompanyScope::class)]
 class Service extends Model
 {
     /** @use HasFactory<ServiceFactory> */

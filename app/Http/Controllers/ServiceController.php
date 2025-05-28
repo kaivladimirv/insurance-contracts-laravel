@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InUse;
-use App\Facades\Auth;
 use App\Http\Requests\Service\IndexServiceRequest;
 use App\Http\Resources\ServiceResource;
-use App\Models\Service;
 use App\ReadModels\ServiceFetcher;
 use App\Swagger\Responses\CollectionResponse;
 use App\Swagger\Responses\Service\ServiceNameValidationErrorResponse;
@@ -68,7 +65,6 @@ class ServiceController extends Controller
     public function index(IndexServiceRequest $request, ServiceFetcher $fetcher): AnonymousResourceCollection
     {
         $services = $fetcher->get(
-            Auth::company()->id,
             self::LIMIT,
             (int)$request->validated('page'),
             $request->validated()
@@ -131,8 +127,10 @@ class ServiceController extends Controller
         response: 404,
         description: 'Service not found'
     )]
-    public function show(Service $service): ServiceResource
+    public function show(int $serviceId, ServiceFetcher $fetcher): ServiceResource
     {
+        $service = $fetcher->getOne($serviceId);
+
         return new ServiceResource($service);
     }
 
@@ -200,9 +198,6 @@ class ServiceController extends Controller
         response: 409,
         description: 'The service is used in contracts'
     )]
-    /**
-     * @throws InUse
-     */
     public function destroy(DeleteCommand $command, DeleteHandler $handler): Response
     {
         $handler->handle($command);

@@ -38,8 +38,6 @@ class IncreaseDueToProvidedServiceCancellationTest extends TestCase
 
         $this->companyAuthorizedByToken();
 
-        App::make(CurrentCompanyService::class)->setCompanyId($this->company->id);
-
         $contract = Contract::factory()->for($this->company)->createOne();
         $this->contractService = ContractServiceFactory::new()->for($contract)
             ->withLimitQuantity(10)

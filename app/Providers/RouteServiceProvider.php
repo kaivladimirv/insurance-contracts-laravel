@@ -42,7 +42,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
         });
 
-        Route::bind('service', fn($serviceId) => app(ServiceFetcher::class)->getOne(Auth::company()->id, $serviceId));
         Route::bind('contract', fn($contractId) => app(ContractFetcher::class)->getOne(Auth::company()->id, $contractId));
         Route::bind(
             'contractService',

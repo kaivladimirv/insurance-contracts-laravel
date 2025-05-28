@@ -7,26 +7,24 @@ namespace App\ReadModels;
 use App\Models\Service;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class ServiceFetcher
 {
-    public function get(int $companyId, int $limit, int $page, array $filter): LengthAwarePaginator
+    public function get(int $limit, int $page, array $filter): LengthAwarePaginator
     {
         return $this->builder($filter)
-            ->where('company_id', '=', $companyId)
+            ->orderBy('name')
             ->paginate($limit, ['*'], 'page', $page);
     }
 
-    public function getOne(int $companyId, int $serviceId): Model|Builder|Service
+    public function getOne(int $serviceId): Service
     {
-        return Service::query()
-            ->where('company_id', '=', $companyId)
+        return $this->builder()
             ->where('id', '=', $serviceId)
             ->firstOrFail();
     }
 
-    private function builder(array $filter): Builder
+    private function builder(array $filter = []): Builder
     {
         $builder = Service::query();
 
@@ -34,7 +32,6 @@ class ServiceFetcher
             $builder->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
-        return $builder
-            ->orderBy('name');
+        return $builder;
     }
 }

@@ -9,6 +9,8 @@ use App\Models\ContractService;
 use App\Models\InsuredPerson;
 use App\Models\ProvidedService;
 use App\Models\Service;
+use App\Services\CurrentCompanyService;
+use Illuminate\Support\Facades\App;
 use Override;
 use Tests\TestCase;
 

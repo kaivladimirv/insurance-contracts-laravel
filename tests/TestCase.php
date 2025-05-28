@@ -3,8 +3,10 @@
 namespace Tests;
 
 use App\Models\Company;
+use App\Services\CurrentCompanyService;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\App;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -18,5 +20,7 @@ abstract class TestCase extends BaseTestCase
         $this->company = Company::factory()->createOne();
 
         $this->withToken($this->company->createAccessToken()->plainTextToken);
+
+        App::make(CurrentCompanyService::class)->setCompanyId($this->company->id);
     }
 }

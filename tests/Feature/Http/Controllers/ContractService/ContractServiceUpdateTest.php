@@ -11,6 +11,8 @@ use App\Models\Contract;
 use App\Models\ContractService;
 use App\Models\InsuredPerson;
 use App\Models\ProvidedService;
+use App\Services\CurrentCompanyService;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Override;
 use Random\RandomException;

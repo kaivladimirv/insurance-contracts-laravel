@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Notifications\Balance;
 
+use App\Models\Contract;
+use App\Services\CurrentCompanyService;
+use Illuminate\Support\Facades\App;
 use Override;
 use App\Notifications\Balance\BalanceIncreasedDueToProvidedServiceCancellation;
 use Database\Factories\BalanceFactory;
@@ -22,8 +25,11 @@ class BalanceIncreasedDueToProvidedServiceCancellationTest extends TestCase
     {
         parent::setUp();
 
-        $contractService = ContractServiceFactory::new()->createOne();
-        $insuredPerson = InsuredPersonFactory::new()->createOne();
+        $this->companyAuthorizedByToken();
+
+        $contract = Contract::factory()->for($this->company)->createOne();
+        $contractService = ContractServiceFactory::new()->for($contract)->createOne();
+        $insuredPerson = InsuredPersonFactory::new()->for($contract)->createOne();
         $providedService = ProvidedServiceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
         $balance = BalanceFactory::new()->for($insuredPerson)->for($contractService)->createOne();
 
