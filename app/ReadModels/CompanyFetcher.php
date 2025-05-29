@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace App\ReadModels;
 
 use App\Models\Company;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class CompanyFetcher
 {
     public function getOneByEmailConfirmToken(string $emailConfirmToken): Company|Model
     {
-        return Company::query()->where('email_confirm_token', $emailConfirmToken)->firstOrFail();
+        return $this->builder()->where('email_confirm_token', $emailConfirmToken)->firstOrFail();
     }
 
     public function getOneByNewEmailConfirmToken(int $companyId, string $token): Company|Model
     {
-        return Company::query()
-            ->where('id', $companyId)
+        return $this->builder()
             ->where('new_email_confirm_token', $token)
-            ->firstOrFail();
+            ->findOrFail($companyId);
     }
 
     public function existsByEmail(string $email, ?int $excludeCompanyId): bool
     {
-        $builder = Company::query()->select('id')->where('email', $email);
+        $builder = $this->builder()->select('id')->where('email', $email);
 
         if ($excludeCompanyId !== null) {
             $builder->where('id', '<>', $excludeCompanyId);
@@ -35,12 +35,17 @@ class CompanyFetcher
 
     public function existsByName(string $name, ?int $excludeCompanyId): bool
     {
-        $builder = Company::query()->select('id')->where('name', $name);
+        $builder = $this->builder()->select('id')->where('name', $name);
 
         if ($excludeCompanyId !== null) {
             $builder->where('id', '<>', $excludeCompanyId);
         }
 
         return $builder->exists();
+    }
+
+    private function builder(): Builder
+    {
+        return Company::query();
     }
 }
