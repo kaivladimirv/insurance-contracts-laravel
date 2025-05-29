@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UseCases\Company\Update;
 
-use App\Models\Company;
 use App\ReadModels\CompanyFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
@@ -26,8 +25,7 @@ readonly class UpdateHandler implements CommandHandler
     #[Override]
     public function handle(UpdateCommand|Command $command): void
     {
-        /** @var Company $company */
-        $company = Company::query()->findOrFail($command->company_id);
+        $company = $this->fetcher->getOne($command->company_id);
 
         if ($company->name !== $command->name) {
             $this->assertNameIsUnique($command);

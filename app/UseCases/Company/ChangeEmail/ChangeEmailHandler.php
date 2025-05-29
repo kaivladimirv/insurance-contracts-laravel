@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\UseCases\Company\ChangeEmail;
 
 use App\Events\Company\CompanyEmailChanged;
-use App\Models\Company;
 use App\ReadModels\CompanyFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
@@ -28,8 +27,7 @@ readonly class ChangeEmailHandler implements CommandHandler
     #[Override]
     public function handle(ChangeEmailCommand|Command $command): void
     {
-        /** @var Company $company */
-        $company = Company::query()->findOrFail($command->company_id);
+        $company = $this->fetcher->getOne($command->company_id);
 
         $this->assertEmailDoesNotMatched($company->email, $command->email);
         $this->assertEmailIsUnique($command);

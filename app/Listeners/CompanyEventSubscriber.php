@@ -8,26 +8,26 @@ use App\Events\Company\CompanyEmailChanged;
 use App\Events\Company\CompanyPasswordChanged;
 use App\Events\Company\CompanyRegistered;
 use App\Models\Company;
+use App\ReadModels\CompanyFetcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 
 class CompanyEventSubscriber implements ShouldQueue
 {
     public function handleRegistered(CompanyRegistered $event): void
     {
-        /** @var Company $company */
-        $company = Company::query()->findOrFail($event->companyId);
+        $company = $this->getCompany($event->companyId);
 
-        $message = (new \App\Mail\CompanyRegistered($company))->onQueue('emails');
+        $message = new \App\Mail\CompanyRegistered($company)->onQueue('emails');
         Mail::to($company->email)->queue($message);
     }
 
     public function handleEmailChanged(CompanyEmailChanged $event): void
     {
-        /** @var Company $company */
-        $company = Company::query()->findOrFail($event->companyId);
+        $company = $this->getCompany($event->companyId);
 
-        $message = (new \App\Mail\CompanyEmailChanged($company))->onQueue('emails');
+        $message = new \App\Mail\CompanyEmailChanged($company)->onQueue('emails');
         Mail::to($event->newEmail)->queue($message);
 
         $company->tokens()->delete();
@@ -35,9 +35,13 @@ class CompanyEventSubscriber implements ShouldQueue
 
     public function handlePasswordChanged(CompanyPasswordChanged $event): void
     {
-        /** @var Company $company */
-        $company = Company::query()->findOrFail($event->companyId);
+        $company = $this->getCompany($event->companyId);
         $company->tokens()->delete();
+    }
+
+    private function getCompany(int $companyId): Company
+    {
+        return App::make(CompanyFetcher::class)->getOne($companyId);
     }
 
     public function subscribe(): array

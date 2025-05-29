@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompanyFetcher
 {
+    public function getOne(int $companyId): Company
+    {
+        return $this->builder()->findOrFail($companyId);
+    }
+
     public function getOneByEmailConfirmToken(string $emailConfirmToken): Company|Model
     {
         return $this->builder()->where('email_confirm_token', $emailConfirmToken)->firstOrFail();
