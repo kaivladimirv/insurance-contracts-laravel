@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\UseCases\InsuredPerson\Delete;
 
-use App\Models\Balance;
 use App\ReadModels\InsuredPersonFetcher;
 use App\UseCases\Command;
 use App\UseCases\CommandHandler;
@@ -26,8 +25,6 @@ readonly class DeleteHandler implements CommandHandler
         $insuredPerson = $this->fetcher->getOne($command->contract_id, $command->insured_person_id);
 
         $this->specification->throwExceptionIfIsNotSatisfiedBy($insuredPerson);
-
-        Balance::forInsuredPerson($insuredPerson->id)->delete();
 
         $insuredPerson->delete();
     }
