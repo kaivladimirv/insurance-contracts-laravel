@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
 use Database\Factories\ContractServiceFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property int $service_id
  * @property Contract $contract
  * @property Service $service
+ * @method static Builder forContractAndService(int $contractId, int $serviceId)
  */
 class ContractService extends Model
 {
@@ -50,5 +52,14 @@ class ContractService extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    /**
+     * @psalm-api
+     */
+    public function scopeForContractAndService(Builder $query, int $contractId, int $serviceId): Builder
+    {
+        return $query->where('contract_id', $contractId)
+            ->where('service_id', $serviceId);
     }
 }

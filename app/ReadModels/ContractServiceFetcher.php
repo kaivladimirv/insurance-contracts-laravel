@@ -21,21 +21,19 @@ class ContractServiceFetcher
     public function getOne(int $contractId, int $serviceId): ContractService
     {
         return $this->builder()
-            ->where('contract_id', '=', $contractId)
-            ->where('service_id', '=', $serviceId)
+            ->forContractAndService($contractId, $serviceId)
             ->firstOrFail();
     }
 
     public function isExist(int $contractId, int $serviceId): bool
     {
         return $this->builder()
+            ->forContractAndService($contractId, $serviceId)
             ->select('id')
-            ->where('contract_id', '=', $contractId)
-            ->where('service_id', '=', $serviceId)
             ->exists();
     }
 
-    private function builder(array $filter = []): Builder
+    private function builder(array $filter = []): Builder|ContractService
     {
         $builder = ContractService::query();
 
