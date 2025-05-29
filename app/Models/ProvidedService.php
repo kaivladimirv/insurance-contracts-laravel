@@ -8,6 +8,7 @@ use App\Dto\ProvidedServiceDto;
 use App\Enums\LimitType;
 use App\Models\Traits\SerializeDate;
 use Database\Factories\ProvidedServiceFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property int $contract_id
  * @property Contract $contract
  * @property InsuredPerson $insuredPerson
+ * @method static Builder forInsuredPerson(int $insuredPersonId)
  */
 class ProvidedService extends Model
 {
@@ -106,5 +108,14 @@ class ProvidedService extends Model
             $this->insured_person_id,
             $this->getValue(),
         );
+    }
+
+    /**
+     * @psalm-api
+     * @return Builder<ProvidedService>
+     */
+    public function scopeForInsuredPerson(Builder $query, int $insuredPersonId): Builder
+    {
+        return $query->where('insured_person_id', $insuredPersonId);
     }
 }

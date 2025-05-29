@@ -18,7 +18,7 @@ class ProvidedServiceFetcher
         array $filter
     ): LengthAwarePaginator {
         return $this->builder($filter)
-            ->where('insured_person_id', '=', $insuredPersonId)
+            ->forInsuredPerson($insuredPersonId)
             ->orderBy('date_of_service')
             ->paginate($limit, ['*'], 'page', $page);
     }
@@ -33,7 +33,7 @@ class ProvidedServiceFetcher
     public function getOne(int $insuredPersonId, int $providedServiceId): ProvidedService
     {
         return $this->builder()
-            ->where('insured_person_id', '=', $insuredPersonId)
+            ->forInsuredPerson($insuredPersonId)
             ->where('id', '=', $providedServiceId)
             ->firstOrFail();
     }
@@ -41,8 +41,8 @@ class ProvidedServiceFetcher
     public function getExpenseByService(int $insuredPersonId, int $serviceId): object
     {
         return $this->builder()
+            ->forInsuredPerson($insuredPersonId)
             ->select(DB::raw('COALESCE(sum(quantity), 0) AS quantity, COALESCE(sum(amount), 0) AS amount'))
-            ->where('insured_person_id', $insuredPersonId)
             ->where('service_id', $serviceId)
             ->first();
     }
@@ -50,7 +50,7 @@ class ProvidedServiceFetcher
     public function getAmountByInsuredPersonId(int $insuredPersonId): float
     {
         return (float)$this->builder()
-            ->where('insured_person_id', $insuredPersonId)
+            ->forInsuredPerson($insuredPersonId)
             ->sum('amount');
     }
 
@@ -63,7 +63,7 @@ class ProvidedServiceFetcher
             ->exists();
     }
 
-    private function builder(array $filter = []): Builder
+    private function builder(array $filter = []): Builder|ProvidedService
     {
         $builder = ProvidedService::query();
 
