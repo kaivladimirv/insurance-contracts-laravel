@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DebtorsRequest;
 use App\Http\Resources\DebtorResource;
-use App\Models\Contract;
 use App\ReadModels\DebtorFetcher;
 use App\Swagger\Responses\CollectionResponse;
 use App\Swagger\Responses\Debtors\ValidationErrorResponse;
@@ -109,10 +108,10 @@ class DebtorsController extends Controller
         description: 'Validation error',
         content: new JsonContent(ref: ValidationErrorResponse::class)
     )]
-    public function indexByContract(DebtorsRequest $request, Contract $contract, DebtorFetcher $fetcher): AnonymousResourceCollection
+    public function indexByContract(DebtorsRequest $request, int $contractId, DebtorFetcher $fetcher): AnonymousResourceCollection
     {
         $data = $fetcher->getAllByContractId(
-            $contract->id,
+            $contractId,
             self::LIMIT,
             (int)$request->validated('page'),
             $request->validated()
