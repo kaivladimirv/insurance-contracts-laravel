@@ -21,8 +21,7 @@ class ContractFetcher
     public function getOne(int $contractId): Contract
     {
         return $this->builder()
-            ->where('id', '=', $contractId)
-            ->firstOrFail();
+            ->findOrFail($contractId);
     }
 
     private function builder(array $filter = []): Builder
