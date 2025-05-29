@@ -23,8 +23,7 @@ class PersonFetcher
     public function getOne(int $personId): Person
     {
         return $this->builder()
-            ->where('id', '=', $personId)
-            ->firstOrFail();
+            ->findOrFail($personId);
     }
 
     public function getOneByInviteToken(string $token): Person
