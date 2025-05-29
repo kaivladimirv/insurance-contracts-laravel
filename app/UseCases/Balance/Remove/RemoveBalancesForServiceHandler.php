@@ -14,6 +14,6 @@ readonly class RemoveBalancesForServiceHandler implements CommandHandler
     #[Override]
     public function handle(RemoveBalancesForServiceCommand|Command $command): void
     {
-        Balance::byContractAndService($command->contract_id, $command->service_id)->delete();
+        Balance::forContractAndService($command->contract_id, $command->service_id)->delete();
     }
 }
