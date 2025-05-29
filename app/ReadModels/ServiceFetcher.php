@@ -20,8 +20,7 @@ class ServiceFetcher
     public function getOne(int $serviceId): Service
     {
         return $this->builder()
-            ->where('id', '=', $serviceId)
-            ->firstOrFail();
+            ->findOrFail($serviceId);
     }
 
     private function builder(array $filter = []): Builder
