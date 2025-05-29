@@ -17,32 +17,32 @@ Route::controller(CompanyController::class)->name('company.')->prefix('company')
 );
 
 Route::controller(PersonController::class)->name('persons.')->prefix('persons')
-    ->whereNumber('person')->middleware('auth:sanctum')->group(
+    ->whereNumber('id')->middleware('auth:sanctum')->group(
         base_path('routes/v1/person.php')
     );
 
 Route::controller(ServiceController::class)->name('services.')->prefix('services')
-    ->whereNumber('service')->middleware('auth:sanctum')->group(
+    ->whereNumber('id')->middleware('auth:sanctum')->group(
         base_path('routes/v1/service.php')
     );
 
 Route::controller(ContractController::class)->name('contracts.')->prefix('contracts')
-    ->whereNumber('contract')->middleware('auth:sanctum')->group(
+    ->whereNumber('id')->middleware('auth:sanctum')->group(
         base_path('routes/v1/contract.php')
     );
 
 Route::controller(ContractServiceController::class)->name('contractServices.')->prefix('contracts/{contract_id}/services')
-    ->whereNumber(['contract', 'contractService'])->middleware('auth:sanctum')->group(
+    ->whereNumber(['contract_id', 'service_id'])->middleware('auth:sanctum')->group(
         base_path('routes/v1/contract_service.php')
     );
 
 Route::controller(InsuredPersonController::class)->name('insuredPerson.')->prefix('contracts/{contract_id}/insured_persons')
-    ->whereNumber(['contract', 'insuredPerson'])->middleware('auth:sanctum')->group(
+    ->whereNumber(['contract_id', 'insured_person_id'])->middleware('auth:sanctum')->group(
         base_path('routes/v1/insured_person.php')
     );
 
 Route::controller(ProvidedServiceController::class)->name('providedServices.')->prefix('insured_persons/{insured_person_id}/provided_services')
-    ->whereNumber(['insuredPerson', 'providedService'])->middleware('auth:sanctum')->group(
+    ->whereNumber(['insured_person_id', 'provided_service_id'])->middleware('auth:sanctum')->group(
         base_path('routes/v1/provided_service.php')
     );
 
