@@ -27,7 +27,7 @@ readonly class DeleteHandler implements CommandHandler
 
         $this->specification->throwExceptionIfIsNotSatisfiedBy($insuredPerson);
 
-        Balance::query()->where('insured_person_id', $insuredPerson->id)->delete();
+        Balance::forInsuredPerson($insuredPerson->id)->delete();
 
         $insuredPerson->delete();
     }

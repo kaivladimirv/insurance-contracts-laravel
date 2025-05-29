@@ -20,6 +20,8 @@ use InvalidArgumentException;
  * @property int $insured_person_id
  * @property InsuredPerson $insuredPerson
  * @method static Builder byContractAndService(int $contract_id, int $service_id)
+ * @method static Builder|self forInsuredPersonAndService(int $insuredPersonId, int $serviceId)
+ * @method static Builder|self forInsuredPerson(int $insuredPersonId)
  */
 class Balance extends Model
 {
@@ -55,6 +57,24 @@ class Balance extends Model
     {
         return $query->where('contract_id', '=', $contractId)
             ->where('service_id', '=', $serviceId);
+    }
+
+    /**
+     * @psalm-api
+     */
+    public function scopeForInsuredPersonAndService(Builder $query, int $insuredPersonId, int $serviceId): Builder
+    {
+        /** @var Builder|Balance $query */
+        return $query->forInsuredPerson($insuredPersonId)
+            ->where('service_id', $serviceId);
+    }
+
+    /**
+     * @psalm-api
+     */
+    public function scopeForInsuredPerson(Builder $query, int $insuredPersonId): Builder
+    {
+        return $query->where('insured_person_id', $insuredPersonId);
     }
 
     public function add(float $value): void
