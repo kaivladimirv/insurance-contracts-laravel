@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Traits\SerializeDate;
 use Database\Factories\InsuredPersonFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property bool $is_allowed_to_exceed_limit
  * @property Contract $contract
  * @property Person $person
+ * @method static Builder forContract(int $contractId)
  */
 class InsuredPerson extends Model
 {
@@ -54,5 +56,13 @@ class InsuredPerson extends Model
     public function providedServices(): HasMany
     {
         return $this->hasMany(ProvidedService::class);
+    }
+
+    /**
+     * @psalm-api
+     */
+    public function scopeForContract(Builder $query, int $contractId): Builder
+    {
+        return $query->where('contract_id', $contractId);
     }
 }

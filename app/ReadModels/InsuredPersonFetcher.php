@@ -14,7 +14,7 @@ class InsuredPersonFetcher
     public function get(int $contractId, int $limit, int $page, array $filter): LengthAwarePaginator
     {
         return $this->builder($filter)
-            ->where('contract_id', '=', $contractId)
+            ->forContract($contractId)
             ->orderBy('policy_number')
             ->paginate($limit, ['*'], 'page', $page);
     }
@@ -22,19 +22,18 @@ class InsuredPersonFetcher
     public function getAllIdsByContract(int $contractId): Collection
     {
         return $this->builder()
-            ->where('contract_id', $contractId)
+            ->forContract($contractId)
             ->pluck('id');
     }
 
     public function getOne(int $contractId, int $insuredPersonId): InsuredPerson
     {
         return $this->builder()
-            ->where('contract_id', '=', $contractId)
-            ->where('id', '=', $insuredPersonId)
-            ->firstOrFail();
+            ->forContract($contractId)
+            ->findOrFail($insuredPersonId);
     }
 
-    private function builder(array $filter = []): Builder
+    private function builder(array $filter = []): Builder|InsuredPerson
     {
         $builder = InsuredPerson::query();
 
