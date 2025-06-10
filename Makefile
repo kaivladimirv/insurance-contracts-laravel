@@ -79,7 +79,7 @@ semgrep-offline:
 	docker run --rm -v "${PWD}:/src" semgrep/semgrep semgrep scan --config auto --severity ERROR --use-git-ignore --error
 
 psalm:
-	vendor/bin/sail exec laravel.test ./vendor/bin/psalm --threads=8
+	vendor/bin/sail exec laravel.test ./vendor/bin/psalm --threads=auto
 
 clear-all-cache:
 	vendor/bin/sail artisan cache:clear
