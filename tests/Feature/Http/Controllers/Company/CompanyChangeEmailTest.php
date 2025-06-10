@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CompanyChangeEmailTest extends TestCase
@@ -40,6 +41,29 @@ class CompanyChangeEmailTest extends TestCase
         $this->assertEquals($formData['email'], $this->company->new_email);
         $this->assertNotNull($this->company->new_email_confirm_token);
         Event::assertDispatched(CompanyEmailChanged::class);
+    }
+
+    #[DataProvider('invalidEmailProvider')]
+    public function testInvalidEmail(mixed $invalidValue, string $expectedMessage): void
+    {
+        $formData['email'] = $invalidValue;
+
+        $this->withBasicAuth($this->company->email, $this->password)
+            ->postJson(route(self::ROUTE_NAME), $formData)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['email' => $expectedMessage]);
+    }
+
+    public static function invalidEmailProvider(): array
+    {
+        $longString = fake()->regexify('[A-Za-z0-9]{300}');
+
+        return [
+            [null, 'The email field is required'],
+            [$longString, 'The email field must not be greater than 255 characters'],
+            ['plain-string', 'The email field must be a valid email address'],
+            ['user@example.com', 'The email field must be a valid email address'],
+        ];
     }
 
     public function testEmailUniqueFail(): void

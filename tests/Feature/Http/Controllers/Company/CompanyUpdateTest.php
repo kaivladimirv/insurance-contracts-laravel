@@ -6,6 +6,7 @@ namespace Tests\Feature\Http\Controllers\Company;
 
 use App\Models\Company;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CompanyUpdateTest extends TestCase
@@ -31,13 +32,24 @@ class CompanyUpdateTest extends TestCase
         $this->assertDatabaseHas(Company::class, $expected);
     }
 
-    public function testNameRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $formData = ['name' => ''];
+        $formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name' => 'The name field is required.']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
+    }
+
+    public static function invalidDataProvider(): array
+    {
+        $longString = fake()->regexify('[A-Za-z0-9]{300}');
+
+        return [
+            ['name', null, 'The name field is required'],
+            ['name', $longString, 'The name field must not be greater than 255 characters'],
+        ];
     }
 
     public function testNameUniqueFail(): void

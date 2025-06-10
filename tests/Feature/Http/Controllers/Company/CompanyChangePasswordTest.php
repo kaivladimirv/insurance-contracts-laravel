@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CompanyChangePasswordTest extends TestCase
@@ -46,6 +47,33 @@ class CompanyChangePasswordTest extends TestCase
 
         $this->assertTrue(Hash::check($newPassword, $this->company->password_hash));
         Event::assertDispatched(CompanyPasswordChanged::class);
+    }
+
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
+    {
+        $formData[$field] = $invalidValue;
+
+        $this->withBasicAuth($this->company->email, $this->oldPassword)
+            ->postJson(route(self::ROUTE_NAME), $formData)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
+    }
+
+    public static function invalidDataProvider(): array
+    {
+        $longString = fake()->regexify('[A-Za-z0-9]{300}');
+
+        return [
+            ['password', Str::password(7), 'The password field must be at least 8 characters'],
+            ['password', $longString, 'The password field must not be greater than 255 characters'],
+            ['password', Str::password(8, letters: false), 'The password field must contain at least one letter'],
+            ['password', Str::password(8, symbols: false), 'The password field must contain at least one symbol'],
+            ['password', Str::password(8, numbers: false), 'The password field must contain at least one number'],
+            ['password', strtolower(Str::password(8)), 'The password field must contain at least one uppercase and one lowercase letter'],
+            ['password', 'P@ssw0rd', 'The given password has appeared in a data leak. Please choose a different password.'],
+            ['password', 'P@ssw0rd', 'The given password has appeared in a data leak. Please choose a different password.']
+        ];
     }
 
     public function testPasswordMismatchFail(): void
