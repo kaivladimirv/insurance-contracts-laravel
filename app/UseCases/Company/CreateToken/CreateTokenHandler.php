@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\UseCases\Company\CreateToken;
 
 use App\ReadModels\CompanyFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Laravel\Sanctum\NewAccessToken;
 use Override;
 
-readonly class CreateTokenHandler implements CommandHandler
+readonly class CreateTokenHandler extends AbstractHandler
 {
     /**
      * @psalm-api

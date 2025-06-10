@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\UseCases\Person\JoinToChatbot;
 
 use App\ReadModels\PersonFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class JoinToChatbotHandler implements CommandHandler
+readonly class JoinToChatbotHandler extends AbstractHandler
 {
     /**
      * @psalm-api

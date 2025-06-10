@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\UseCases\Person\LeaveChatbot;
 
 use App\ReadModels\PersonFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class LeaveChatbotHandler implements CommandHandler
+readonly class LeaveChatbotHandler extends AbstractHandler
 {
     /**
      * @psalm-api

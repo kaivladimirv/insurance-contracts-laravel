@@ -6,12 +6,12 @@ namespace App\UseCases\ProvidedService\Registration;
 
 use App\Events\ProvidedService\ProvidedServiceRegistered;
 use App\Models\Builders\ProvidedServiceBuilder;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Kaivladimirv\LaravelSpecificationPattern\SpecificationInterface;
 use Override;
 
-readonly class RegistrationHandler implements CommandHandler
+readonly class RegistrationHandler extends AbstractHandler
 {
     /**
      * @psalm-api

@@ -6,17 +6,17 @@ namespace App\UseCases\Person\Add;
 
 use App\Events\Person\PersonAdded;
 use App\Models\Person;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class AddHandler implements CommandHandler
+readonly class AddHandler extends AbstractHandler
 {
     #[Override]
     public function handle(AddCommand|Command $command): int
     {
         $person = new Person();
-        $person->fill($command->only(...$person->getFillable())->toArray());
+        $person->fill($this->extractFillableData($command, $person));
         $person->company()->associate($command->company_id);
         $person->save();
 

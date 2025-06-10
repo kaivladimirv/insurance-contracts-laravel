@@ -6,11 +6,11 @@ namespace App\UseCases\ProvidedService\CancelRegistration;
 
 use App\Events\ProvidedService\RegistrationOfProvidedServiceCanceled;
 use App\ReadModels\ProvidedServiceFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class CancelRegistrationHandler implements CommandHandler
+readonly class CancelRegistrationHandler extends AbstractHandler
 {
     /**
      * @psalm-api

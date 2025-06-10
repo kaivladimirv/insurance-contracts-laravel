@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\UseCases\Company\Update;
 
 use App\ReadModels\CompanyFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Illuminate\Validation\ValidationException;
 use Override;
 
-readonly class UpdateHandler implements CommandHandler
+readonly class UpdateHandler extends AbstractHandler
 {
     /**
      * @psalm-api
@@ -31,7 +31,7 @@ readonly class UpdateHandler implements CommandHandler
             $this->assertNameIsUnique($command);
         }
 
-        $company->fill($command->only(...$company->getFillable())->toArray());
+        $company->fill($this->extractFillableData($command, $company));
         $company->save();
     }
 

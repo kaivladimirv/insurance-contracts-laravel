@@ -6,11 +6,11 @@ namespace App\UseCases\ContractService\Delete;
 
 use App\Events\ContractService\RemoveServiceFromContract;
 use App\ReadModels\ContractServiceFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class DeleteHandler implements CommandHandler
+readonly class DeleteHandler extends AbstractHandler
 {
     /**
      * @psalm-api

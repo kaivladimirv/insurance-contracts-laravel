@@ -7,13 +7,13 @@ namespace App\UseCases\Company\ChangePassword;
 use App\Events\Company\CompanyPasswordChanged;
 use App\Models\Company;
 use App\ReadModels\CompanyFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Override;
 
-readonly class ChangePasswordHandler implements CommandHandler
+readonly class ChangePasswordHandler extends AbstractHandler
 {
     /**
      * @psalm-api

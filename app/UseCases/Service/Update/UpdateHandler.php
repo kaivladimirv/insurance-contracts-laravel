@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\UseCases\Service\Update;
 
 use App\ReadModels\ServiceFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class UpdateHandler implements CommandHandler
+readonly class UpdateHandler extends AbstractHandler
 {
     /**
      * @psalm-api
@@ -22,7 +22,7 @@ readonly class UpdateHandler implements CommandHandler
     public function handle(UpdateCommand|Command $command): void
     {
         $service = $this->fetcher->getOne($command->id);
-        $service->fill($command->only(...$service->getFillable())->toArray());
+        $service->fill($this->extractFillableData($command, $service));
         $service->save();
     }
 }

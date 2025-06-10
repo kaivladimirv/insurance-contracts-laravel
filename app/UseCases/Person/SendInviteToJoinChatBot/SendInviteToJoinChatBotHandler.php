@@ -8,13 +8,13 @@ use App\Enums\NotifierType;
 use App\Models\Person;
 use App\Notifications\Person\InvitationToJoinChatBot;
 use App\ReadModels\PersonFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use DomainException;
 use Illuminate\Support\Str;
 use Override;
 
-readonly class SendInviteToJoinChatBotHandler implements CommandHandler
+readonly class SendInviteToJoinChatBotHandler extends AbstractHandler
 {
     /**
      * @psalm-api

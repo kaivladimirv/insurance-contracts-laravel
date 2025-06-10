@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\UseCases\Company\Confirm;
 
 use App\ReadModels\CompanyFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class ConfirmHandler implements CommandHandler
+readonly class ConfirmHandler extends AbstractHandler
 {
     /**
      * @psalm-api

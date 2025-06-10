@@ -6,13 +6,13 @@ namespace App\UseCases\Company\ChangeEmail;
 
 use App\Events\Company\CompanyEmailChanged;
 use App\ReadModels\CompanyFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Override;
 
-readonly class ChangeEmailHandler implements CommandHandler
+readonly class ChangeEmailHandler extends AbstractHandler
 {
     /**
      * @psalm-api

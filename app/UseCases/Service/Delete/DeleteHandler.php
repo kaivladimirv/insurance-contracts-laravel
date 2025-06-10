@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\UseCases\Service\Delete;
 
 use App\ReadModels\ServiceFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Kaivladimirv\LaravelSpecificationPattern\SpecificationInterface;
 use Override;
 
-readonly class DeleteHandler implements CommandHandler
+readonly class DeleteHandler extends AbstractHandler
 {
     /**
      * @psalm-api

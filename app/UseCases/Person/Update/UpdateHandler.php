@@ -6,11 +6,11 @@ namespace App\UseCases\Person\Update;
 
 use App\Events\Person\PersonUpdated;
 use App\ReadModels\PersonFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Override;
 
-readonly class UpdateHandler implements CommandHandler
+readonly class UpdateHandler extends AbstractHandler
 {
     /**
      * @psalm-api
@@ -24,7 +24,7 @@ readonly class UpdateHandler implements CommandHandler
     {
         $person = $this->fetcher->getOne($command->id);
 
-        $person->fill($command->only(...$person->getFillable())->toArray());
+        $person->fill($this->extractFillableData($command, $person));
 
         if ($person->isDirty('phone_number')) {
             $person->telegram_chat_status = null;

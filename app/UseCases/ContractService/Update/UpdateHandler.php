@@ -6,12 +6,12 @@ namespace App\UseCases\ContractService\Update;
 
 use App\Events\ContractService\ServiceUpdatedToContract;
 use App\ReadModels\ContractServiceFetcher;
+use App\UseCases\AbstractHandler;
 use App\UseCases\Command;
-use App\UseCases\CommandHandler;
 use Kaivladimirv\LaravelSpecificationPattern\SpecificationInterface;
 use Override;
 
-readonly class UpdateHandler implements CommandHandler
+readonly class UpdateHandler extends AbstractHandler
 {
     /**
      * @psalm-api
