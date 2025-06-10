@@ -44,7 +44,7 @@ class PersonUpdateTest extends TestCase
             ->assertNoContent();
 
         $this->assertDatabaseHas(Person::class, array_merge($formData, ['id' => $this->person->id]));
-        Event::dispatch(PersonUpdated::class, ['personId' => $this->person->id, 'hasNotifierTypeChanged' => false]);
+        Event::assertDispatched(PersonUpdated::class, fn(PersonUpdated $event) => $event->personId === $this->person->id);
     }
 
     public function testNotificationByEmailSuccess(): void
@@ -58,7 +58,7 @@ class PersonUpdateTest extends TestCase
             ->assertNoContent();
 
         $this->assertDatabaseHas(Person::class, array_merge($formData, ['id' => $this->person->id]));
-        Event::dispatch(PersonUpdated::class, ['personId' => $this->person->id, 'hasNotifierTypeChanged' => true]);
+        Event::assertDispatched(PersonUpdated::class, fn(PersonUpdated $event) => $event->personId === $this->person->id);
     }
 
     public function testNotificationByTelegramSuccess(): void
@@ -72,7 +72,7 @@ class PersonUpdateTest extends TestCase
             ->assertNoContent();
 
         $this->assertDatabaseHas(Person::class, array_merge($formData, ['id' => $this->person->id]));
-        Event::dispatch(PersonUpdated::class, ['personId' => $this->person->id, 'hasNotifierTypeChanged' => true]);
+        Event::assertDispatched(PersonUpdated::class, fn(PersonUpdated $event) => $event->personId === $this->person->id);
     }
 
     public function testSendInvitationToJoinChatBotSuccess(): void
