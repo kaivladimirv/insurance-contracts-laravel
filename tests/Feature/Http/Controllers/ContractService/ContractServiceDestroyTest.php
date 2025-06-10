@@ -8,9 +8,7 @@ use App\Events\ContractService\RemoveServiceFromContract;
 use App\Models\Contract;
 use App\Models\ContractService;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 use Override;
-use Random\RandomException;
 use Tests\TestCase;
 
 class ContractServiceDestroyTest extends TestCase
@@ -43,9 +41,6 @@ class ContractServiceDestroyTest extends TestCase
         Event::assertDispatched(RemoveServiceFromContract::class);
     }
 
-    /**
-     * @throws RandomException
-     */
     public function testNotFoundFail(): void
     {
         $nonExistentServiceId = fake()->numberBetween(100);

@@ -10,8 +10,8 @@ use App\Models\InsuredPerson;
 use App\Models\Person;
 use Database\Factories\InsuredPersonFactory;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class InsuredPersonStoreTest extends TestCase
@@ -29,10 +29,10 @@ class InsuredPersonStoreTest extends TestCase
 
         $this->companyAuthorizedByToken();
 
-        $person = Person::factory()->for($this->company)->createOne();
+        $personFactory = Person::factory()->for($this->company);
         $this->contract = Contract::factory()->for($this->company)->createOne();
-        $this->insuredPersonFactory = InsuredPerson::factory()->for($this->contract);
-        $this->formData = $this->insuredPersonFactory->for($person)->makeOne()->toArray();
+        $this->insuredPersonFactory = InsuredPerson::factory()->for($this->contract)->for($personFactory);
+        $this->formData = $this->insuredPersonFactory->makeOne()->toArray();
     }
 
     public function testSuccess(): void
@@ -47,62 +47,44 @@ class InsuredPersonStoreTest extends TestCase
         Event::assertDispatched(InsuredPersonAdded::class);
     }
 
-    public function testPersonIdRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        unset($this->formData['person_id']);
+        $this->formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['person_id' => 'The person id field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testPolicyNumberRequiredFail(): void
+    public static function invalidDataProvider(): array
     {
-        unset($this->formData['policy_number']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('policy_number');
+        return [
+            ['person_id', null, 'The person id field is required'],
+            ['policy_number', null, 'The policy number field is required'],
+            ['is_allowed_to_exceed_limit', null, 'The is allowed to exceed limit field is required'],
+            ['is_allowed_to_exceed_limit', null, 'The is allowed to exceed limit field must be true or false.'],
+            ['person_id', -1, 'The selected person id is invalid'],
+        ];
     }
 
-    public function testIsAllowedToExceedLimitRequiredFail(): void
+    #[DataProvider('uniqueFieldsProvider')]
+    public function testUniqueFields(string $field, string $expectedMessage): void
     {
-        unset($this->formData['is_allowed_to_exceed_limit']);
+        $existingValue = $this->insuredPersonFactory->createOne()->getAttribute($field);
+        $this->formData[$field] = $existingValue;
 
         $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
             ->assertUnprocessable()
-            ->assertInvalid('is_allowed_to_exceed_limit');
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testPersonIdDoesNotExistFail(): void
+    public static function uniqueFieldsProvider(): array
     {
-        $this->formData['person_id'] = -1;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('person_id');
-    }
-
-    public function testPersonIdUniqueFail(): void
-    {
-        $existingInsuredPerson = $this->insuredPersonFactory->createOne();
-
-        $this->formData['person_id'] = $existingInsuredPerson->person_id;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('person_id');
-    }
-
-    public function testPolicyNumberUniqueFail(): void
-    {
-        $existingPolicyNumber = $this->insuredPersonFactory->createOne()->policy_number;
-
-        $this->formData['policy_number'] = $existingPolicyNumber;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('policy_number');
+        return [
+            ['person_id', 'The person id has already been taken'],
+            ['policy_number', 'The policy number has already been taken']
+        ];
     }
 
     public function testInvalidTokenFail(): void

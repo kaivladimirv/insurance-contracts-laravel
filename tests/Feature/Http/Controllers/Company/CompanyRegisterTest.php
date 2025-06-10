@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CompanyRegisterTest extends TestCase
@@ -57,110 +58,34 @@ class CompanyRegisterTest extends TestCase
         Event::assertDispatched(CompanyRegistered::class);
     }
 
-    public function testNameRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $this->formData['name'] = '';
+        $this->formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name' => 'The name field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testNameMax255Fail(): void
+    public static function invalidDataProvider(): array
     {
-        $this->formData['name'] = Str::random(256);
+        $longString = fake()->regexify('[A-Za-z0-9]{300}');
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name' => 'The name field must not be greater than 255 characters']);
-    }
-
-    public function testEmailRequiredFail(): void
-    {
-        $this->formData['email'] = '';
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email field is required']);
-    }
-
-    public function testEmailMax255Fail(): void
-    {
-        $this->formData['email'] = Str::random(256) . $this->formData['email'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email field must not be greater than 255 characters']);
-    }
-
-    public function testPasswordMin8Fail(): void
-    {
-        $this->formData['password'] = Str::password(7);
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must be at least 8 characters']);
-    }
-
-    public function testPasswordMax255Fail(): void
-    {
-        $this->formData['password'] = Str::password(256);
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must not be greater than 255 characters']);
-    }
-
-    public function testPasswordLettersFail(): void
-    {
-        $this->formData['password'] = Str::password(8, letters: false);
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must contain at least one letter']);
-    }
-
-    public function testPasswordSymbolsFail(): void
-    {
-        $this->formData['password'] = Str::password(8, symbols: false);
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must contain at least one symbol']);
-    }
-
-    public function testPasswordNumbersFail(): void
-    {
-        $this->formData['password'] = Str::password(8, numbers: false);
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must contain at least one number']);
-    }
-
-    public function testPasswordMixedCaseFail(): void
-    {
-        $this->formData['password'] = strtolower(Str::password(8));
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The password field must contain at least one uppercase and one lowercase letter']);
-    }
-
-    public function testPasswordUncompromisedFail(): void
-    {
-        $this->formData['password'] = 'P@ssw0rd';
-        $this->formData['password_confirmation'] = $this->formData['password'];
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['password' => 'The given password has appeared in a data leak. Please choose a different password.']);
+        return [
+            ['name', null, 'The name field is required'],
+            ['name', $longString, 'The name field must not be greater than 255 characters'],
+            ['email', null, 'The email field is required'],
+            ['email', $longString, 'The email field must not be greater than 255 characters'],
+            ['password', Str::password(7), 'The password field must be at least 8 characters'],
+            ['password', $longString, 'The password field must not be greater than 255 characters'],
+            ['password', Str::password(8, letters: false), 'The password field must contain at least one letter'],
+            ['password', Str::password(8, symbols: false), 'The password field must contain at least one symbol'],
+            ['password', Str::password(8, numbers: false), 'The password field must contain at least one number'],
+            ['password', strtolower(Str::password(8)), 'The password field must contain at least one uppercase and one lowercase letter'],
+            ['password', 'P@ssw0rd', 'The given password has appeared in a data leak. Please choose a different password.'],
+            ['password', 'P@ssw0rd', 'The given password has appeared in a data leak. Please choose a different password.']
+        ];
     }
 
     public function testPasswordMismatchFail(): void
@@ -172,21 +97,21 @@ class CompanyRegisterTest extends TestCase
             ->assertJsonValidationErrors(['password' => 'The password field confirmation does not match']);
     }
 
-    public function testNameUniqueFail(): void
+    #[DataProvider('uniqueFieldsProvider')]
+    public function testUniqueFields(string $field, string $expectedMessage): void
     {
-        Company::factory()->createOne(['name' => $this->company->name]);
+        Company::factory()->createOne([$field => $this->company->getAttribute($field)]);
 
         $this->postJson(route(self::ROUTE_NAME), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name' => 'The name has already been taken']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testEmailUniqueFail(): void
+    public static function uniqueFieldsProvider(): array
     {
-        Company::factory()->createOne(['email' => $this->company->email]);
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email has already been taken']);
+        return [
+            ['name', 'The name has already been taken'],
+            ['email', 'The email has already been taken'],
+        ];
     }
 }

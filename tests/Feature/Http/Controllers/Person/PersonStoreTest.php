@@ -13,6 +13,7 @@ use Database\Factories\PersonFactory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PersonStoreTest extends TestCase
@@ -30,14 +31,14 @@ class PersonStoreTest extends TestCase
         $this->companyAuthorizedByToken();
 
         $this->personFactory = Person::factory()->for($this->company);
-        $this->formData = $this->personFactory->make()->toArray();
+        $this->formData = $this->personFactory->makeOne()->toArray();
     }
 
     public function testSuccess(): void
     {
         Event::fake();
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
 
@@ -49,7 +50,7 @@ class PersonStoreTest extends TestCase
     {
         $this->formData['notifier_type'] = NotifierType::EMAIL;
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
     }
@@ -58,7 +59,7 @@ class PersonStoreTest extends TestCase
     {
         $this->formData['notifier_type'] = NotifierType::TELEGRAM;
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
     }
@@ -66,9 +67,10 @@ class PersonStoreTest extends TestCase
     public function testSendInvitationToJoinChatBotSuccess(): void
     {
         Notification::fake();
+
         $this->formData['notifier_type'] = NotifierType::TELEGRAM;
 
-        $response = $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $response = $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
 
@@ -81,7 +83,7 @@ class PersonStoreTest extends TestCase
     {
         $this->formData['notifier_type'] = NotifierType::TELEGRAM;
 
-        $response = $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $response = $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
 
@@ -98,76 +100,67 @@ class PersonStoreTest extends TestCase
         $this->formData['email'] = null;
         $this->formData['phone_number'] = null;
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertOk()
             ->assertJsonStructure(['id']);
 
         $this->assertDatabaseHas(Person::class, $this->formData);
     }
 
-    public function testLastNameRequiredFail(): void
+    #[DataProvider('uniqueFieldsProvider')]
+    public function testUniqueFields(string $field, string $expectedMessage): void
     {
-        $this->formData['last_name'] = '';
+        $this->formData[$field] = $this->personFactory->createOne()->getAttribute($field);
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['last_name' => 'The last name field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testFirstNameRequiredFail(): void
+    public static function uniqueFieldsProvider(): array
     {
-        $this->formData['first_name'] = '';
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['first_name' => 'The first name field is required']);
+        return [
+            ['email', 'The email has already been taken'],
+            ['phone_number', 'The phone number has already been taken']
+        ];
     }
 
-    public function testMiddleNameRequiredFail(): void
+    #[DataProvider('requiredFieldsIfNotificationByProvider')]
+    public function testRequiredFieldsIfNotificationBy(NotifierType $notifierType, string $field, string $expectedMessage): void
     {
-        $this->formData['middle_name'] = '';
+        $this->formData['notifier_type'] = $notifierType;
+        $this->formData[$field] = '';
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['middle_name' => 'The middle name field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testEmailUniqueFail(): void
+    public static function requiredFieldsIfNotificationByProvider(): array
     {
-        $this->formData['email'] = $this->personFactory->createOne()->email;
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email has already been taken']);
+        return [
+            [NotifierType::EMAIL, 'email', 'The email field is required when notifier type is ' . NotifierType::EMAIL->value],
+            [NotifierType::TELEGRAM, 'phone_number', 'The phone number field is required when notifier type is ' . NotifierType::TELEGRAM->value]
+        ];
     }
 
-    public function testPhoneNumberUniqueFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $this->formData['phone_number'] = $this->personFactory->createOne()->phone_number;
+        $this->formData[$field] = $invalidValue;
 
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
+        $this->postJson($this->route(), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['phone_number' => 'The phone number has already been taken']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testEmailRequiredIfNotificationByEmailFail(): void
+    public static function invalidDataProvider(): array
     {
-        $this->formData['email'] = '';
-        $this->formData['notifier_type'] = NotifierType::EMAIL;
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email field is required when notifier type is ' . NotifierType::EMAIL->value]);
-    }
-
-    public function testPhoneNumberRequiredIfNotificationByTelegramFail(): void
-    {
-        $this->formData['phone_number'] = '';
-        $this->formData['notifier_type'] = NotifierType::TELEGRAM;
-
-        $this->postJson(route(self::ROUTE_NAME), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['phone_number' => 'The phone number field is required when notifier type is ' . NotifierType::TELEGRAM->value]);
+        return [
+            ['first_name', '', 'The first name field is required'],
+            ['last_name', '', 'The last name field is required'],
+            ['middle_name', '', 'The middle name field is required']
+        ];
     }
 
     public function testInvalidTokenFail(): void
@@ -175,14 +168,19 @@ class PersonStoreTest extends TestCase
         $invalidToken = fake()->uuid();
 
         $this->withToken($invalidToken)
-            ->postJson(route(self::ROUTE_NAME), $this->formData)
+            ->postJson($this->route(), $this->formData)
             ->assertUnauthorized();
     }
 
     public function testGuestFail(): void
     {
         $this->withoutToken()
-            ->postJson(route(self::ROUTE_NAME), $this->formData)
+            ->postJson($this->route(), $this->formData)
             ->assertUnauthorized();
+    }
+
+    protected function route(): string
+    {
+        return route(static::ROUTE_NAME);
     }
 }

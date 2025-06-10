@@ -13,6 +13,7 @@ use Database\Factories\PersonFactory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PersonUpdateTest extends TestCase
@@ -118,51 +119,43 @@ class PersonUpdateTest extends TestCase
         $this->assertDatabaseHas(Person::class, array_merge($formData, ['id' => $this->person->id]));
     }
 
-    public function testLastNameRequiredFail(): void
+    #[DataProvider('uniqueFieldsProvider')]
+    public function testUniqueFields(string $field, string $expectedMessage): void
     {
-        $formData = $this->person->makeHidden('last_name')->toArray();
+        $existingValue = $this->personFactory->createOne()->getAttribute($field);
+        $formData = $this->person->setAttribute($field, $existingValue)->toArray();
 
         $this->postJson(route(self::ROUTE_NAME, $this->person), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['last_name' => 'The last name field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testFirstNameRequiredFail(): void
+    public static function uniqueFieldsProvider(): array
     {
-        $formData = $this->person->makeHidden('first_name')->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->person), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['first_name' => 'The first name field is required']);
+        return [
+            ['email', 'The email has already been taken'],
+            ['phone_number', 'The phone number has already been taken']
+        ];
     }
 
-    public function testMiddleNameRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $formData = $this->person->makeHidden('middle_name')->toArray();
+        $formData = $this->person->toArray();
+        $formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, $this->person), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['middle_name' => 'The middle name field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testEmailUniqueFail(): void
+    public static function invalidDataProvider(): array
     {
-        $existingEmail = $this->personFactory->createOne()->email;
-        $formData = $this->person->setAttribute('email', $existingEmail)->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->person), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['email' => 'The email has already been taken']);
-    }
-
-    public function testPhoneNumberUniqueFail(): void
-    {
-        $existingPhoneNumber = $this->personFactory->createOne()->phone_number;
-        $formData = $this->person->setAttribute('phone_number', $existingPhoneNumber)->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->person), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['phone_number' => 'The phone number has already been taken']);
+        return [
+            ['first_name', '', 'The first name field is required'],
+            ['last_name', '', 'The last name field is required'],
+            ['middle_name', '', 'The middle name field is required']
+        ];
     }
 
     public function testNotFoundFail(): void

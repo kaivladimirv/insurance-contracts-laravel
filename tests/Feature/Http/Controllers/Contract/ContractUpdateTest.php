@@ -7,6 +7,7 @@ namespace Tests\Feature\Http\Controllers\Contract;
 use App\Models\Contract;
 use Database\Factories\ContractFactory;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ContractUpdateTest extends TestCase
@@ -29,39 +30,12 @@ class ContractUpdateTest extends TestCase
 
     public function testSuccess(): void
     {
-        $formData = $this->contractFactory->make()->toArray();
+        $formData = $this->contractFactory->makeOne()->toArray();
 
         $this->postJson(route(self::ROUTE_NAME, $this->contract), $formData)
             ->assertNoContent();
 
         $this->assertDatabaseHas(Contract::class, array_merge($formData, ['id' => $this->contract->id]));
-    }
-
-    public function testNumberRequiredFail(): void
-    {
-        $formData = $this->contract->makeHidden('number')->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['number' => 'The number field is required']);
-    }
-
-    public function testStartDateRequiredFail(): void
-    {
-        $formData = $this->contract->makeHidden('start_date')->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['start_date' => 'The start date field is required']);
-    }
-
-    public function testEndDateRequiredFail(): void
-    {
-        $formData = Contract::factory()->make(['end_date' => null])->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['end_date' => 'The end date field is required']);
     }
 
     public function testEndDateAfterOrEqualStartDateFail(): void
@@ -73,13 +47,24 @@ class ContractUpdateTest extends TestCase
             ->assertJsonValidationErrors(['end_date' => 'The end date field must be a date after or equal to start date']);
     }
 
-    public function testMaxAmountRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $formData = $this->contract->makeHidden('max_amount')->toArray();
+        $formData = $this->contract->setAttribute($field, $invalidValue)->toArray();
 
         $this->postJson(route(self::ROUTE_NAME, $this->contract), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['max_amount' => 'The max amount field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
+    }
+
+    public static function invalidDataProvider(): array
+    {
+        return [
+            ['number', null, 'The number field is required'],
+            ['start_date', null, 'The start date field is required'],
+            ['end_date', null, 'The end date field is required'],
+            ['max_amount', null, 'The max amount field is required']
+        ];
     }
 
     public function testNumberUniqueFail(): void

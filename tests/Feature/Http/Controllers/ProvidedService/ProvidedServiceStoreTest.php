@@ -21,6 +21,7 @@ use Database\Factories\ServiceFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ProvidedServiceStoreTest extends TestCase
@@ -81,58 +82,26 @@ class ProvidedServiceStoreTest extends TestCase
         Event::assertListening(ProvidedServiceRegistered::class, [ProvidedServiceEventSubscriber::class, 'handleRegistered']);
     }
 
-    public function testServiceIdRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        unset($this->formData['service_id']);
+        $this->formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
             ->assertUnprocessable()
-            ->assertInvalid('service_id');
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testDateOfServiceRequiredFail(): void
+    public static function invalidDataProvider(): array
     {
-        unset($this->formData['date_of_service']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('date_of_service');
-    }
-
-    public function testQuantityRequiredFail(): void
-    {
-        unset($this->formData['quantity']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('quantity');
-    }
-
-    public function testPriceRequiredFail(): void
-    {
-        unset($this->formData['price']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('price');
-    }
-
-    public function testQuantityGreaterThanZeroFail(): void
-    {
-        $this->formData['quantity'] = 0;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('quantity');
-    }
-
-    public function testPriceGreaterThanZeroFail(): void
-    {
-        $this->formData['price'] = 0;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->insuredPerson), $this->formData)
-            ->assertUnprocessable()
-            ->assertInvalid('price');
+        return [
+            ['service_id', null, 'The service id field is required'],
+            ['date_of_service', null, 'The date of service field is required'],
+            ['quantity', null, 'The quantity field is required'],
+            ['quantity', 0, 'The quantity field must be greater than 0'],
+            ['price', null, 'The price field is required'],
+            ['price', 0, 'The price field must be greater than 0'],
+        ];
     }
 
     public function testContractHasExpiredFail(): void

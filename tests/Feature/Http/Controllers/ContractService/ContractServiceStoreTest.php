@@ -10,6 +10,7 @@ use App\Models\ContractService;
 use Database\Factories\ContractServiceFactory;
 use Illuminate\Support\Facades\Event;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ContractServiceStoreTest extends TestCase
@@ -43,24 +44,6 @@ class ContractServiceStoreTest extends TestCase
         Event::assertDispatched(ServiceAddedToContract::class);
     }
 
-    public function testServiceIdRequiredFail(): void
-    {
-        $this->formData['service_id'] = null;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['service_id' => 'The service id field is required']);
-    }
-
-    public function testServiceIdDoesNotExistFail(): void
-    {
-        $this->formData['service_id'] = -1;
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['service_id' => 'The selected service id is invalid']);
-    }
-
     public function testServiceIdUniqueFail(): void
     {
         $existingContractService = $this->contractServiceFactory->createOne();
@@ -72,31 +55,26 @@ class ContractServiceStoreTest extends TestCase
             ->assertJsonValidationErrors(['service_id' => 'The service id has already been taken']);
     }
 
-    public function testLimitTypeDoesNotExistFail(): void
+
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $this->formData['limit_type'] = 123;
+        $this->formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_type' => 'The selected limit type is invalid']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testLimitTypeRequiredFail(): void
+    public static function invalidDataProvider(): array
     {
-        unset($this->formData['limit_type']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_type' => 'The limit type field is required']);
-    }
-
-    public function testLimitValueRequiredFail(): void
-    {
-        unset($this->formData['limit_value']);
-
-        $this->postJson(route(self::ROUTE_NAME, $this->contract), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_value' => 'The limit value field is required']);
+        return [
+            ['service_id', null, 'The service id field is required'],
+            ['service_id', -1, 'The selected service id is invalid'],
+            ['limit_type', 123, 'The selected limit type is invalid'],
+            ['limit_type', null, 'The limit type field is required'],
+            ['limit_value', null, 'The limit value field is required']
+        ];
     }
 
     public function testInvalidTokenFail(): void

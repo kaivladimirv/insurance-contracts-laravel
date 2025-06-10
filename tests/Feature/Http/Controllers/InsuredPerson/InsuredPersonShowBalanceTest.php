@@ -8,9 +8,7 @@ use App\Models\Contract;
 use App\Models\InsuredPerson;
 use App\Models\Service;
 use Database\Factories\BalanceFactory;
-use Illuminate\Support\Str;
 use Override;
-use Random\RandomException;
 use Tests\TestCase;
 
 class InsuredPersonShowBalanceTest extends TestCase
@@ -53,9 +51,6 @@ class InsuredPersonShowBalanceTest extends TestCase
             ->assertJson([]);
     }
 
-    /**
-     * @throws RandomException
-     */
     public function testNotFoundFail(): void
     {
         $nonExistentInsuredPersonId = fake()->numberBetween(100);

@@ -7,9 +7,8 @@ namespace Tests\Feature\Http\Controllers\InsuredPerson;
 use App\Models\Contract;
 use App\Models\InsuredPerson;
 use Database\Factories\InsuredPersonFactory;
-use Illuminate\Support\Str;
 use Override;
-use Random\RandomException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class InsuredPersonUpdateTest extends TestCase
@@ -42,22 +41,24 @@ class InsuredPersonUpdateTest extends TestCase
         $this->assertDatabaseHas(InsuredPerson::class, array_merge($formData, ['id' => $this->insuredPerson->id]));
     }
 
-    public function testPolicyNumberRequiredFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $formData = $this->insuredPerson->makeHidden('policy_number')->toArray();
+        $formData = $this->insuredPerson->toArray();
+        $formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, [$this->contract, $this->insuredPerson]), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['policy_number' => 'The policy number field is required']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testIsAllowedToExceedLimitRequiredFail(): void
+    public static function invalidDataProvider(): array
     {
-        $formData = $this->insuredPerson->makeHidden('is_allowed_to_exceed_limit')->toArray();
-
-        $this->postJson(route(self::ROUTE_NAME, [$this->contract, $this->insuredPerson]), $formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['is_allowed_to_exceed_limit' => 'The is allowed to exceed limit field is required']);
+        return [
+            ['policy_number', null, 'The policy number field is required'],
+            ['is_allowed_to_exceed_limit', null, 'The is allowed to exceed limit field is required'],
+            ['is_allowed_to_exceed_limit', null, 'The is allowed to exceed limit field must be true or false.']
+        ];
     }
 
     public function testPolicyNumberUniqueFail(): void
@@ -71,9 +72,6 @@ class InsuredPersonUpdateTest extends TestCase
             ->assertJsonValidationErrors(['policy_number' => 'The policy number has already been taken']);
     }
 
-    /**
-     * @throws RandomException
-     */
     public function testNotFoundFail(): void
     {
         $nonExistentInsuredPersonId = fake()->numberBetween(100);

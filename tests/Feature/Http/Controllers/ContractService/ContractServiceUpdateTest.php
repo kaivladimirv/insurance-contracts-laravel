@@ -11,11 +11,9 @@ use App\Models\Contract;
 use App\Models\ContractService;
 use App\Models\InsuredPerson;
 use App\Models\ProvidedService;
-use App\Services\CurrentCompanyService;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Override;
-use Random\RandomException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ContractServiceUpdateTest extends TestCase
@@ -55,31 +53,23 @@ class ContractServiceUpdateTest extends TestCase
         Event::assertDispatched(ServiceUpdatedToContract::class);
     }
 
-    public function testLimitTypeDoesNotExistFail(): void
+    #[DataProvider('invalidDataProvider')]
+    public function testInvalidData(string $field, mixed $invalidValue, string $expectedMessage): void
     {
-        $this->formData['limit_type'] = 123;
+        $this->formData[$field] = $invalidValue;
 
         $this->postJson(route(self::ROUTE_NAME, [$this->contract, $this->contractService->service_id]), $this->formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_type' => 'The selected limit type is invalid']);
+            ->assertJsonValidationErrors([$field => $expectedMessage]);
     }
 
-    public function testLimitTypeRequiredFail(): void
+    public static function invalidDataProvider(): array
     {
-        unset($this->formData['limit_type']);
-
-        $this->postJson(route(self::ROUTE_NAME, [$this->contract, $this->contractService->service_id]), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_type' => 'The limit type field is required']);
-    }
-
-    public function testLimitValueRequiredFail(): void
-    {
-        unset($this->formData['limit_value']);
-
-        $this->postJson(route(self::ROUTE_NAME, [$this->contract, $this->contractService->service_id]), $this->formData)
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['limit_value' => 'The limit value field is required']);
+        return [
+            ['limit_type', 123, 'The selected limit type is invalid'],
+            ['limit_type', null, 'The limit type field is required'],
+            ['limit_value', null, 'The limit value field is required']
+        ];
     }
 
     public function testWasProvidedFail(): void
@@ -100,9 +90,6 @@ class ContractServiceUpdateTest extends TestCase
             ->postJson(route(self::ROUTE_NAME, [$this->contract, $this->contractService->service_id]), $this->formData);
     }
 
-    /**
-     * @throws RandomException
-     */
     public function testNotFoundFail(): void
     {
         $nonExistentServiceId = fake()->numberBetween(100);

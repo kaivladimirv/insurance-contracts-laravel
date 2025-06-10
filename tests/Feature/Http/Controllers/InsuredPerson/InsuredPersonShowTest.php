@@ -6,7 +6,6 @@ namespace Tests\Feature\Http\Controllers\InsuredPerson;
 
 use App\Models\Contract;
 use App\Models\InsuredPerson;
-use Illuminate\Support\Str;
 use Override;
 use Tests\TestCase;
 

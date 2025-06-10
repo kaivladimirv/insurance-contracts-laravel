@@ -48,7 +48,7 @@ class CompanyUpdateTest extends TestCase
 
         $this->postJson(route(self::ROUTE_NAME), $formData)
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name' => __('Name already in use')]);
+            ->assertJsonValidationErrors(['name' => 'Name already in use']);
     }
 
     public function testInvalidTokenFail(): void

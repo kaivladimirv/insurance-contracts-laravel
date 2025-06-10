@@ -13,9 +13,7 @@ use Database\Factories\ContractServiceFactory;
 use Database\Factories\ProvidedServiceFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 use Override;
-use Random\RandomException;
 use Tests\TestCase;
 
 class ProvidedServiceDestroyTest extends TestCase
@@ -51,6 +49,7 @@ class ProvidedServiceDestroyTest extends TestCase
     public function testSuccess(): void
     {
         Event::fake();
+
         $this->delete(route(self::ROUTE_NAME, [$this->insuredPerson, $this->providedService]))
             ->assertNoContent();
 
@@ -59,9 +58,6 @@ class ProvidedServiceDestroyTest extends TestCase
         Event::assertListening(RegistrationOfProvidedServiceCanceled::class, [ProvidedServiceEventSubscriber::class, 'handleCanceled']);
     }
 
-    /**
-     * @throws RandomException
-     */
     public function testNotFoundFail(): void
     {
         $nonExistentProvidedServiceId = fake()->numberBetween(100);
