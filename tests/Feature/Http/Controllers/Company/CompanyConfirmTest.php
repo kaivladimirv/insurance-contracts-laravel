@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Http\Controllers\Company;
 
 use App\Models\Company;
+use Illuminate\Support\Str;
 use Override;
 use Tests\TestCase;
 
@@ -22,7 +23,7 @@ class CompanyConfirmTest extends TestCase
 
     public function testSuccess(): void
     {
-        $this->patch(route(self::ROUTE_NAME, $this->company->email_confirm_token))
+        $this->patchJson(route(self::ROUTE_NAME, $this->company->email_confirm_token))
             ->assertNoContent();
 
         $this->assertDatabaseHas(
@@ -35,11 +36,20 @@ class CompanyConfirmTest extends TestCase
         );
     }
 
+    public function testEmailConfirmTokenMax255Fail(): void
+    {
+        $longString = Str::random(256);
+
+        $this->patchJson(route(self::ROUTE_NAME, ['emailConfirmToken' => $longString]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['emailConfirmToken' => 'The email confirm token field must not be greater than 255 characters']);
+    }
+
     public function testTokenNotFoundFail(): void
     {
         $invalidEmailConfirmToken = '1234567';
 
-        $this->patch(route(self::ROUTE_NAME, $invalidEmailConfirmToken))
+        $this->patchJson(route(self::ROUTE_NAME, $invalidEmailConfirmToken))
             ->assertNotFound();
     }
 }
