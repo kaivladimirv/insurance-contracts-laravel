@@ -20,8 +20,10 @@ readonly class DeleteHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(DeleteCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var DeleteCommand $command */
+
         $contractService = $this->contractServiceFetcher->getOne($command->contract_id, $command->service_id);
         $contractService->delete();
 

@@ -20,8 +20,10 @@ readonly class DeleteHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(DeleteCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var DeleteCommand $command */
+
         $insuredPerson = $this->fetcher->getOne($command->contract_id, $command->insured_person_id);
 
         $this->specification->throwExceptionIfIsNotSatisfiedBy($insuredPerson);

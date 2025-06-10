@@ -21,8 +21,10 @@ readonly class RegistrationHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(RegistrationCommand|Command $command): int
+    public function handle(Command $command): int
     {
+        /** @var RegistrationCommand $command */
+
         $providedService = $this->builder->buildFromCommand($command);
 
         $this->specification->throwExceptionIfIsNotSatisfiedBy($providedService);

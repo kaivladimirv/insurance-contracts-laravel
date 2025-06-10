@@ -24,8 +24,10 @@ readonly class SendInviteToJoinChatBotHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(SendInviteToJoinChatBotCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var SendInviteToJoinChatBotCommand $command */
+
         $person = $this->fetcher->getOne($command->person_id);
 
         $this->assertInviteNotSent($person);

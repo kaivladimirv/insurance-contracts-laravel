@@ -20,8 +20,10 @@ readonly class CancelRegistrationHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(CancelRegistrationCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var CancelRegistrationCommand $command */
+
         $providedService = $this->fetcher->getOne($command->insured_person_id, $command->id);
 
         $providedService->delete();

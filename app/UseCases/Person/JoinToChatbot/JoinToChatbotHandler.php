@@ -19,8 +19,10 @@ readonly class JoinToChatbotHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(JoinToChatbotCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var JoinToChatbotCommand $command */
+
         $person = $this->fetcher->getOneByInviteToken($command->inviteToken);
 
         $person->joinToChatbot($command->chatId);

@@ -20,8 +20,9 @@ readonly class RecalcBalanceByServiceAndInsuredPersonHandler implements CommandH
     }
 
     #[Override]
-    public function handle(RecalcBalanceByServiceAndInsuredPersonCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var RecalcBalanceByServiceAndInsuredPersonCommand $command */
         $calculatedBalanceValue = $this->balanceCalculator->calcByServiceAndInsuredPerson(
             $command->contract_id,
             $command->service_id,

@@ -25,8 +25,10 @@ readonly class ChangeEmailHandler extends AbstractHandler
      * @throws ValidationException
      */
     #[Override]
-    public function handle(ChangeEmailCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var ChangeEmailCommand $command */
+
         $company = $this->fetcher->getOne($command->company_id);
 
         $this->assertEmailDoesNotMatched($company->email, $command->email);

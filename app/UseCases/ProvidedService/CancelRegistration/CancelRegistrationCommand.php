@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\UseCases\ProvidedService\CancelRegistration;
 
+use App\UseCases\Command;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
 
-class CancelRegistrationCommand extends Data
+class CancelRegistrationCommand extends Data implements Command
 {
     public function __construct(
         #[FromRouteParameter('insured_person_id')]

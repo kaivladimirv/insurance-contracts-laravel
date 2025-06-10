@@ -19,8 +19,10 @@ readonly class ConfirmEmailChangeHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(ConfirmEmailChangeCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var ConfirmEmailChangeCommand $command */
+
         $company = $this->fetcher->getOneByNewEmailConfirmToken($command->company_id, $command->new_email_confirm_token);
 
         $company->email = $company->new_email;

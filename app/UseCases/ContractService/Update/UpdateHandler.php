@@ -21,8 +21,10 @@ readonly class UpdateHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(UpdateCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var UpdateCommand $command */
+
         $contractService = $this->contractServiceFetcher->getOne($command->contract_id, $command->service_id);
 
         if ($contractService->limit_type !== $command->limit_type) {

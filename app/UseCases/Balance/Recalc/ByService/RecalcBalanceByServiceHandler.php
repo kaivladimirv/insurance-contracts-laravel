@@ -20,8 +20,9 @@ readonly class RecalcBalanceByServiceHandler implements CommandHandler
      * @throws RecalculationOfBalance
      */
     #[Override]
-    public function handle(RecalcBalanceByServiceCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var RecalcBalanceByServiceCommand $command */
         $this->recalculator->recalc($command->contract_id, $command->service_id);
     }
 }

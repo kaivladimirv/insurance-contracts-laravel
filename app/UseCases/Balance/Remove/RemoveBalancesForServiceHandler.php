@@ -12,8 +12,9 @@ use Override;
 readonly class RemoveBalancesForServiceHandler implements CommandHandler
 {
     #[Override]
-    public function handle(RemoveBalancesForServiceCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var RemoveBalancesForServiceCommand $command */
         Balance::forContractAndService($command->contract_id, $command->service_id)->delete();
     }
 }

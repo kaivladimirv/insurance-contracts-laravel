@@ -13,8 +13,10 @@ use Override;
 readonly class AddHandler extends AbstractHandler
 {
     #[Override]
-    public function handle(AddCommand|Command $command): int
+    public function handle(Command $command): int
     {
+        /** @var AddCommand $command */
+
         $insuredPerson = new InsuredPerson();
         $insuredPerson->fill($this->extractFillableData($command, $insuredPerson));
         $insuredPerson->contract()->associate($command->contract_id);

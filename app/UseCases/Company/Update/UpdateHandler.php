@@ -23,8 +23,10 @@ readonly class UpdateHandler extends AbstractHandler
      * @throws ValidationException
      */
     #[Override]
-    public function handle(UpdateCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var UpdateCommand $command */
+
         $company = $this->fetcher->getOne($command->company_id);
 
         if ($company->name !== $command->name) {

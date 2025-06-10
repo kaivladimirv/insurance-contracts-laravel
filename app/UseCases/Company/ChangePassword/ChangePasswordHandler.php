@@ -26,8 +26,10 @@ readonly class ChangePasswordHandler extends AbstractHandler
      * @throws ValidationException
      */
     #[Override]
-    public function handle(ChangePasswordCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var ChangePasswordCommand $command */
+
         $company = $this->fetcher->getOne($command->company_id);
 
         $this->assertPasswordDoesNotMatched($company, $command->password);

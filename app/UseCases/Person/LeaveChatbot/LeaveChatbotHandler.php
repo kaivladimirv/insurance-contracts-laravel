@@ -19,8 +19,10 @@ readonly class LeaveChatbotHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(LeaveChatbotCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var LeaveChatbotCommand $command */
+
         $person = $this->fetcher->getOneByTelegramChaId($command->chatId);
 
         $person->leaveChatbot();

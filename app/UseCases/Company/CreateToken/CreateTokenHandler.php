@@ -20,8 +20,10 @@ readonly class CreateTokenHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(CreateTokenCommand|Command $command): NewAccessToken
+    public function handle(Command $command): NewAccessToken
     {
+        /** @var CreateTokenCommand $command */
+
         $company = $this->fetcher->getOne($command->companyId);
 
         $company->tokens()->delete();

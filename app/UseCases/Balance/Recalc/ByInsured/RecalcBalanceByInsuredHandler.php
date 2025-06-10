@@ -20,8 +20,10 @@ class RecalcBalanceByInsuredHandler implements CommandHandler
      * @throws RecalculationOfBalance
      */
     #[Override]
-    public function handle(RecalcBalanceByInsuredCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var RecalcBalanceByInsuredCommand $command*/
+
         $this->recalculator->recalc($command->insured_person_id);
     }
 }

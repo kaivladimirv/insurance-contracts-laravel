@@ -15,8 +15,10 @@ use Override;
 readonly class RegisterHandler extends AbstractHandler
 {
     #[Override]
-    public function handle(RegisterCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var RegisterCommand $command */
+
         $company = new Company();
         $company->fill($this->extractFillableData($command, $company));
         $company->email = $command->email;

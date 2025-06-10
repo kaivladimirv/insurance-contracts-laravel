@@ -19,8 +19,10 @@ readonly class UpdateHandler extends AbstractHandler
     }
 
     #[Override]
-    public function handle(UpdateCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var UpdateCommand $command */
+
         $contract = $this->fetcher->getOne($command->id);
         $contract->fill($this->extractFillableData($command, $contract));
         $contract->save();

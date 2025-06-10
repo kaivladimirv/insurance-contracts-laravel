@@ -13,8 +13,10 @@ use Override;
 readonly class AddHandler extends AbstractHandler
 {
     #[Override]
-    public function handle(AddCommand|Command $command): void
+    public function handle(Command $command): void
     {
+        /** @var AddCommand $command */
+
         $contractService = new ContractService();
         $contractService->fill($this->extractFillableData($command, $contractService));
         $contractService->contract()->associate($command->contract_id);
