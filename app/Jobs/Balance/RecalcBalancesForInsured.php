@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Balance;
 
+use App\Enums\QueueName;
 use App\Exceptions\Balance\RecalculationOfBalance;
 use App\UseCases\Balance\Recalc\ByInsured\RecalcBalanceByInsuredCommand;
 use App\UseCases\Balance\Recalc\ByInsured\RecalcBalanceByInsuredHandler;
@@ -21,7 +22,7 @@ class RecalcBalancesForInsured implements ShouldQueue
     public function __construct(
         private readonly int $insuredPersonId
     ) {
-        $this->onQueue('balances');
+        $this->onQueue(QueueName::Balances->value);
     }
 
     /**

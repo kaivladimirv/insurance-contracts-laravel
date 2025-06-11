@@ -19,7 +19,7 @@ class CompanyEventSubscriber implements ShouldQueue
     {
         $company = $this->getCompany($event->companyId);
 
-        $message = new \App\Mail\CompanyRegistered($company)->onQueue('emails');
+        $message = new \App\Mail\CompanyRegistered($company);
         Mail::to($company->email)->queue($message);
     }
 
@@ -27,7 +27,7 @@ class CompanyEventSubscriber implements ShouldQueue
     {
         $company = $this->getCompany($event->companyId);
 
-        $message = new \App\Mail\CompanyEmailChanged($company)->onQueue('emails');
+        $message = new \App\Mail\CompanyEmailChanged($company);
         Mail::to($event->newEmail)->queue($message);
 
         $company->tokens()->delete();

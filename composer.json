@@ -68,7 +68,7 @@
         ],
         "run-queue-workers": [
             "Composer\\Config::disableProcessTimeout",
-            "@php artisan queue:work -v --tries=3 --queue=default,emails,balances"
+            "export $(cat .env | xargs) && php artisan queue:work -v --tries=3 --queue=${QUEUE_NAMES}"
         ],
         "test": [
             "@test-without-db",

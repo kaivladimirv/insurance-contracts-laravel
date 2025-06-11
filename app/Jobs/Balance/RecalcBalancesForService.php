@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Balance;
 
+use App\Enums\QueueName;
 use App\ReadModels\InsuredPersonFetcher;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +21,7 @@ class RecalcBalancesForService implements ShouldQueue
         private readonly int $contractId,
         private readonly int $serviceId
     ) {
-        $this->onQueue('balances');
+        $this->onQueue(QueueName::Balances->value);
     }
 
     public function handle(InsuredPersonFetcher $fetcher): void

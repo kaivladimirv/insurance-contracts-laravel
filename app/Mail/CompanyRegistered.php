@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
+use App\Enums\QueueName;
 use App\Models\Company;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -22,6 +23,7 @@ class CompanyRegistered extends Mailable
      */
     public function __construct(#[WithoutRelations] protected readonly Company $company)
     {
+        $this->onQueue(QueueName::Emails->value);
     }
 
     /**

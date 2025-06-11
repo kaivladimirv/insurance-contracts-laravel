@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Balance;
 
+use App\Enums\QueueName;
 use App\UseCases\Balance\Recalc\ByServiceAndInsuredPerson\RecalcBalanceByServiceAndInsuredPersonCommand;
 use App\UseCases\Balance\Recalc\ByServiceAndInsuredPerson\RecalcBalanceByServiceAndInsuredPersonHandler;
 use Illuminate\Bus\Queueable;
@@ -22,7 +23,7 @@ class RecalcBalance implements ShouldQueue
         private readonly int $insuredPersonId,
         private readonly int $serviceId
     ) {
-        $this->onQueue('balances');
+        $this->onQueue(QueueName::Balances->value);
     }
 
     public function handle(RecalcBalanceByServiceAndInsuredPersonHandler $handler): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Balance;
 
+use App\Enums\QueueName;
 use App\UseCases\Balance\Remove\RemoveBalancesForServiceCommand;
 use App\UseCases\Balance\Remove\RemoveBalancesForServiceHandler;
 use Illuminate\Bus\Queueable;
@@ -21,7 +22,7 @@ class RemoveBalancesForService implements ShouldQueue
         private readonly int $contractId,
         private readonly int $serviceId
     ) {
-        $this->onQueue('balances');
+        $this->onQueue(QueueName::Balances->value);
     }
 
     public function handle(RemoveBalancesForServiceHandler $handler): void
