@@ -49,7 +49,6 @@ services:
         image: rabbitmq:3.13.3-management
         working_dir: /app
         hostname: '${RABBITMQ_HOST}'
-        container_name: rabbitmq
         ports:
             - '15672:15672'
             - '${RABBITMQ_PORT:-5672}:5672'
