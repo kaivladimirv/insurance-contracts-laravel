@@ -144,9 +144,11 @@
 ## Уведомления
    Для работы уведомлений в телеграм, необходимо определить переменные в файле .env:
    ```
-   TELEGRAM_BOT_TOKEN
-   TELEGRAM_BOT_URL
+   TELEGRAM_BOT_TOKEN=your_bot_token_here
+   TELEGRAM_BOT_URL=https://t.me/your_bot_username
    ```
+   - TELEGRAM_BOT_TOKEN — токен вашего Telegram-бота, полученный у @BotFather.
+   - TELEGRAM_BOT_URL — ссылка на вашего Telegram-бота.
 
    Если в карте персоны указано, что уведомления должны происходить через Telegram, 
    то после добавления персоны система отправляет приглашение на подключение к чат-боту по электронной почте.
