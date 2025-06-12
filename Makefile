@@ -7,7 +7,7 @@ restart: down up
 project-init: generate-project-key create-db migrate
 
 docker-up:
-	docker compose up -d
+	WWWGROUP=$$(id -g) WWWUSER=$$(id -u) docker-compose up -d
 
 docker-down:
 	docker compose down --remove-orphans
@@ -16,7 +16,7 @@ docker-down-clear:
 	docker compose down -v --remove-orphans
 
 docker-build:
-	docker compose build
+	WWWGROUP=$$(id -g) WWWUSER=$$(id -u) docker compose build
 
 init-env:
 	[ -f .env ] || cp .env.example .env
